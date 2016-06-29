@@ -20,7 +20,7 @@ RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-harvest/pip-requirement
 RUN $CKAN_HOME/bin/pip install -e git+https://github.com/geopython/pycsw.git@1.10.4#egg=pycsw
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/pycsw/requirements.txt
 
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-ioos-theme.git@85e1f6648edfc122885a882cf2c2de547ebc66b7#egg=ckanext-ioos-theme
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@cce417900536c9536faae7fe8dda4315f31b0770#egg=ckanext-ioos-theme
 
 # Set CKAN_INIT 
 ENV CKAN_INIT="true"
