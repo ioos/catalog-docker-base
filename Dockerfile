@@ -9,7 +9,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y git libgeos-dev libxml2
 # Install the CKAN Spatial extension
 # CKAN spatial extension has no tagged Git releases currently, so freeze the
 # version at a known good commit to prevent breakage from later versions
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ckan/ckanext-spatial.git@stable#egg=ckanext-spatial
+
+# BWA: Use commit off master branch to fix tile issues.  Replaces MapQuest
+#      tiles with Stamen tiles.
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ckan/ckanext-spatial.git@44f05e181c4c70e3b062fec49e0f2251b52610a1#egg=ckanext-spatial
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-spatial/pip-requirements.txt
 
 # must use this commit or similar as tagged versions cause "Add harvests" page
