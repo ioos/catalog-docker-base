@@ -45,6 +45,7 @@ write_config () {
       "error_email_from = ckan@$(hostname -f)" \
       "ckan.site_url = ${CKAN_SERVER_NAME}" \
       "ckan.plugins = stats text_view image_view recline_view spatial_metadata spatial_query harvest ckan_harvester csw_harvester waf_harvester ioos_theme"
+  $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG ckan.extra_resource_fields=guid
 
   sed -i -e "s/\[loggers\]/\n## Message Queue\n\nckan.harvest.mq.type = redis\nckan.harvest.mq.hostname = ${REDIS_HOST}\nckan.harvest.mq.port = ${REDIS_PORT}\nckan.harvest.mq.redis_db = ${REDIS_DB}\n\n## Spatial\n\nckan.spatial.validator.profiles = iso19139ngdc\nckan.spatial.search_backend = solr\nckan.spatial.harvest.continue_on_validation_errors = true\n[loggers]/" "$CONFIG"
   # Enable debug mode
