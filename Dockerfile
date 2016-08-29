@@ -12,7 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y git libgeos-dev libxml2
 
 # BWA: Use commit off master branch to fix tile issues.  Replaces MapQuest
 #      tiles with Stamen tiles.
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ckan/ckanext-spatial.git@44f05e181c4c70e3b062fec49e0f2251b52610a1#egg=ckanext-spatial
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/lukecampbell/ckanext-spatial.git@c312c369cda9a79f7d1d5b37de3f981bc88d6b39#egg=ckanext-spatial
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-spatial/pip-requirements.txt
 
 # must use this commit or similar as tagged versions cause "Add harvests" page
