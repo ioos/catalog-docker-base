@@ -1,6 +1,6 @@
 # main ckan repo does not use versioning and could break, use Luke's version 
 # which freezes version
-FROM lukecampbell/ckan
+FROM ioos/ckan:1.0.0
 
 # Install git
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y
@@ -12,7 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y git libgeos-dev libxml2
 
 # BWA: Use commit off master branch to fix tile issues.  Replaces MapQuest
 #      tiles with Stamen tiles.
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-spatial.git@eb654a1af73247f317306759755070ce8fd87327#egg=ckanext-spatial
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-spatial.git@b8754929e61dc9bc40af2f7777d6c726a3574f32#egg=ckanext-spatial
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-spatial/pip-requirements.txt
 
 # must use this commit or similar as tagged versions cause "Add harvests" page
@@ -23,7 +23,7 @@ RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-harvest/pip-requirement
 RUN $CKAN_HOME/bin/pip install -e git+https://github.com/geopython/pycsw.git@1.10.5#egg=pycsw
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/pycsw/requirements.txt
 
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@5ea68429c5be3ca648e6c90bf5c8364d280f287f#egg=ckanext-ioos-theme
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@31fdffde67c36b23983f324adf74eb37549dbae0#egg=ckanext-ioos-theme
 
 # Set CKAN_INIT 
 ENV CKAN_INIT="true"
