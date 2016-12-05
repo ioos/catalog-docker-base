@@ -16,8 +16,9 @@ RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-spatial.gi
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-spatial/pip-requirements.txt
 
 # must use this commit or similar as tagged versions cause "Add harvests" page
-# to display no fields
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ckan/ckanext-harvest.git@7f506913f8e789#egg=ckanext-harvest
+# to display no fields.  Harvests may also fail to initialize, delete, or run
+# possibly due to breaking API changes.
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-harvest.git@catalog_compat#egg=ckanext-harvest
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-harvest/pip-requirements.txt
 
 RUN $CKAN_HOME/bin/pip install -e git+https://github.com/geopython/pycsw.git@1.10.5#egg=pycsw
