@@ -42,6 +42,7 @@ COPY ./contrib/my_init.d /etc/my_init.d
 COPY ./contrib/supervisor/conf.d /etc/supervisor/conf.d
 
 COPY ./contrib/services /bin/services
+COPY ./contrib/scripts /scripts
 
 # run the init script
 CMD ["/sbin/my_init"]
