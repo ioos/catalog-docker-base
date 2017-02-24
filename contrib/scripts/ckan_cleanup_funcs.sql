@@ -27,8 +27,8 @@ CREATE OR REPLACE FUNCTION trunc_activity()
     RETURNS void AS $$
     TRUNCATE activity_detail;
     TRUNCATE activity; $$ LANGUAGE sql;
-COMMENT ON FUNCTION trunc_activity_detail() IS 'Clears activity* tables';
-REVOKE ALL ON FUNCTION trunc_activity_detail() FROM PUBLIC;
+COMMENT ON FUNCTION trunc_activity() IS 'Clears activity* tables';
+REVOKE ALL ON FUNCTION trunc_activity() FROM PUBLIC;
 
 
 CREATE OR REPLACE FUNCTION delete_old_harvests()
