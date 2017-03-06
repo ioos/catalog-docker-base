@@ -1,6 +1,12 @@
-#!/bin/sh
-exec 2>&1
+#!/bin/bash
+set -ex
 
-set -e
+/usr/bin/supervisord
 
-exec /usr/bin/supervisord -n
+echo "Looking for log"
+while [ ! -f /var/log/syslog ]; do
+    echo "."
+    sleep 2
+done
+echo "Found the file"
+tail -F /var/log/syslog
