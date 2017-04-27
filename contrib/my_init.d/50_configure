@@ -13,6 +13,13 @@
 : ${PYCSW_DB_URL:=}
 : ${CKAN_DEBUG:=false}
 : ${CKAN_SERVER_NAME:=}
+: ${MAIL_SERVER:=}
+: ${MAIL_PORT:=}
+: ${MAIL_USE_TLS:=}
+: ${MAIL_USERNAME:=}
+: ${MAIL_PASSWORD:=}
+: ${MAIL_FROM:=admin.ioos.us}
+: ${FEEDBACK_RECIPIENTS:=}
 
 set -eux
 
@@ -48,6 +55,28 @@ write_config () {
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG ckan.extra_resource_fields=guid
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "ckan.ioos_theme.pycsw_config=${CKAN_HOME}/src/pycsw/default.cfg"
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "ckan.cors.origin_allow_all = true"
+
+  if [ -n "$MAIL_SERVER" ]; then
+      $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "smtp.server = $MAIL_SERVER"
+  fi
+  if [ -n "$MAIL_PORT" ]; then
+      $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "smtp.port = $MAIL_PORT"
+  fi
+  if [ -n "$MAIL_USE_TLS" ]; then
+      $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "smtp.starttls = $MAIL_USE_TLS"
+  fi
+  if [ -n "$MAIL_USERNAME" ]; then
+      $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "smtp.user = $MAIL_USERNAME"
+  fi
+  if [ -n "$MAIL_PASSWORD" ]; then
+      $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "smtp.password = $MAIL_PASSWORD"
+  fi
+  if [ -n "$MAIL_FROM" ]; then
+      $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "smtp.mail_from = $MAIL_FROM"
+  fi
+  if [ -n "$FEEDBACK_RECIPIENTS" ]; then
+      $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "feedback.recipients = $FEEDBACK_RECIPIENTS"
+  fi
 
   sed -i -e "s/\[loggers\]/\n## Message Queue\n\nckan.harvest.mq.type = redis\nckan.harvest.mq.hostname = ${REDIS_HOST}\nckan.harvest.mq.port = ${REDIS_PORT}\nckan.harvest.mq.redis_db = ${REDIS_DB}\nckan.harvest.dup_append_type = random-hex\n\n## Spatial\n\nckan.spatial.validator.profiles = iso19139ngdc\nckanext.spatial.search_backend = solr\nckan.spatial.harvest.continue_on_validation_errors = true\n[loggers]/" "$CONFIG"
   # Enable debug mode
