@@ -55,6 +55,7 @@ write_config () {
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG ckan.extra_resource_fields=guid
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "ckan.ioos_theme.pycsw_config=${CKAN_HOME}/src/pycsw/default.cfg"
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "ckan.cors.origin_allow_all = true"
+  $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "ckan.tracking_enabled = true"
 
   if [ -n "$MAIL_SERVER" ]; then
       $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "smtp.server = $MAIL_SERVER"
