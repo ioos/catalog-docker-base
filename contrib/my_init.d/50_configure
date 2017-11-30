@@ -83,6 +83,7 @@ write_config () {
   # TODO: use config tool instead?
   sed -i -e "s/\[loggers\]/\n## Message Queue\n\nckan.harvest.mq.type = redis\nckan.harvest.mq.hostname = ${REDIS_HOST}\nckan.harvest.mq.port = ${REDIS_PORT}\nckan.harvest.mq.redis_db = ${REDIS_DB}\nckan.harvest.dup_append_type = random-hex\n\n## Spatial\n\nckan.spatial.validator.profiles = iso19139ngdc\nckanext.spatial.search_backend = solr\nckan.spatial.harvest.continue_on_validation_errors = true\n[loggers]/" "$CONFIG"
 
+# add GA data
 "$CKAN_HOME/bin/paster" --plugin=ckan config-tool "$CONFIG" "googleanalytics.id=${GA_ID}" \
         "googleanalytics.account=${GA_ACCOUNT}" \
         "googleanalytics.username=${GA_USERNAME}" \
