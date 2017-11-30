@@ -43,7 +43,6 @@ write_config () {
   "$CKAN_HOME"/bin/paster make-config ckan "$CONFIG"
 
   "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -e \
-      "port = 8080" \
       "sqlalchemy.url = ${DATABASE_URL}" \
       "solr_url = ${SOLR_URL}" \
       "ckan.storage_path = /var/lib/ckan" \
