@@ -42,6 +42,10 @@ write_config () {
   local redis_db=$(echo $REDIS_URL | cut -f4 -d/)
   "$CKAN_HOME"/bin/paster make-config ckan "$CONFIG"
 
+  # use the same port for the webserver when debug is enabled
+  "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -s server:main \
+                                                -e 'port = 8080'
+
   "$CKAN_HOME"/bin/paster --plugin=ckan config-tool "$CONFIG" -e \
       "sqlalchemy.url = ${DATABASE_URL}" \
       "solr_url = ${SOLR_URL}" \
