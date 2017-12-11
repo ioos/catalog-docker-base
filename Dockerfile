@@ -27,7 +27,7 @@ RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/pycsw/requirements.txt
 RUN "$CKAN_HOME/bin/pip" install -e  git+https://github.com/datagovuk/ckanext-ga-report.git#egg=ckanext-ga-report && \
     "$CKAN_HOME/bin/pip" install -r "$CKAN_HOME/src/ckanext-ga-report/requirements.txt"
 
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@feedback#egg=ckanext-ioos-theme
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@1.2b1#egg=ckanext-ioos-theme
 
 # Set CKAN_INIT 
 ENV CKAN_INIT="true"
