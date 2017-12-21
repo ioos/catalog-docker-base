@@ -91,6 +91,7 @@ write_config () {
         "googleanalytics.account=${GA_ACCOUNT}" \
         "googleanalytics.username=${GA_USERNAME}" \
         "googleanalytics.password=${GA_PASSWORD}" \
+        "googleanalytics.track_events=true"
 
   # Enable debug mode
   if [ -n $CKAN_DEBUG ]; then
