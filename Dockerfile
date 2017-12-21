@@ -24,8 +24,10 @@ RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-harvest/pip-requirement
 RUN $CKAN_HOME/bin/pip install -e git+https://github.com/geopython/pycsw.git@1.10.5#egg=pycsw
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/pycsw/requirements.txt
 
-RUN "$CKAN_HOME/bin/pip" install -e  git+https://github.com/datagovuk/ckanext-ga-report.git#egg=ckanext-ga-report && \
-    "$CKAN_HOME/bin/pip" install -r "$CKAN_HOME/src/ckanext-ga-report/requirements.txt"
+RUN "$CKAN_HOME/bin/pip" install --upgrade pip
+
+RUN "$CKAN_HOME/bin/pip" install -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics && \
+    "$CKAN_HOME/bin/pip" install -r "$CKAN_HOME/src/ckanext-googleanalytics/requirements.txt"
 
 RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@1.2b1#egg=ckanext-ioos-theme
 

@@ -55,7 +55,7 @@ write_config () {
       "email_to = disabled@example.com" \
       "error_email_from = ckan@$(hostname -f)" \
       "ckan.site_url = ${CKAN_SERVER_NAME}" \
-      "ckan.plugins = stats text_view image_view recline_view spatial_metadata spatial_query harvest ckan_harvester csw_harvester waf_harvester ioos_theme ioos_waf ga-report"
+      "ckan.plugins = stats text_view image_view recline_view spatial_metadata spatial_query harvest ckan_harvester csw_harvester waf_harvester ioos_theme ioos_waf googleanalytics"
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG ckan.extra_resource_fields=guid
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "ckan.ioos_theme.pycsw_config=${CKAN_HOME}/src/pycsw/default.cfg"
   $CKAN_HOME/bin/paster --plugin=ckan config-tool $CONFIG "ckan.cors.origin_allow_all = true"
@@ -91,8 +91,6 @@ write_config () {
         "googleanalytics.account=${GA_ACCOUNT}" \
         "googleanalytics.username=${GA_USERNAME}" \
         "googleanalytics.password=${GA_PASSWORD}" \
-        "ga-report.period=monthly" \
-        "ga-report.bounce_url=/"
 
   # Enable debug mode
   if [ -n $CKAN_DEBUG ]; then
