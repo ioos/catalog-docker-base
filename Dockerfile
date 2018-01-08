@@ -29,7 +29,7 @@ RUN "$CKAN_HOME/bin/pip" install --upgrade pip
 RUN "$CKAN_HOME/bin/pip" install -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics && \
     "$CKAN_HOME/bin/pip" install -r "$CKAN_HOME/src/ckanext-googleanalytics/requirements.txt"
 
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@1.2b1#egg=ckanext-ioos-theme
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@1.2b2#egg=ckanext-ioos-theme
 
 # Set CKAN_INIT 
 ENV CKAN_INIT="true"
