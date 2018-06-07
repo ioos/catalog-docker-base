@@ -26,6 +26,7 @@ RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/pycsw/requirements.txt
 
 RUN "$CKAN_HOME/bin/pip" install --upgrade pip
 
+# optional, but ships with the image by default
 RUN "$CKAN_HOME/bin/pip" install -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics && \
     "$CKAN_HOME/bin/pip" install -r "$CKAN_HOME/src/ckanext-googleanalytics/requirements.txt"
 
