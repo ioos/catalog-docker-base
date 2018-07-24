@@ -74,4 +74,12 @@ ckan-paster --plugin=ckan db init -c "$config"
 ckan-paster --plugin=ckanext-spatial spatial initdb -c "$config"
 ckan-paster --plugin=ckanext-harvest harvester initdb -c "$config"
 
+ckan-paster --plugin=ckan config-tool "$config" \
+                    "ckan.harvest.mq.type = redis" \
+                    "ckan.harvest.mq.hostname = redis" \
+                    "ckanext.harvest.default_dataset_name_append = random-hex"
+                    "ckan.spatial.validator.profiles = iso19139ngdc" \
+                    "ckanext.spatial.search_backend = solr" \
+                    "ckan.spatial.harvest.continue_on_validation_errors = true"
+
 exec "$@"
