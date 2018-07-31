@@ -35,6 +35,9 @@ alias exec=true
 . /ckan-entrypoint.sh
 unalias exec
 
+if [[ -v POSTGRES_PASSWORD ]]; then
+    export PGPASSWORD="$POSTGRES_PASSWORD"
+fi
 # get the original list of plugins after equals sign
 # (hopefully not newline separated
 plugins_orig=$(grep -Po --color '(?<=^ckan\.plugins)\s*=.*$' "$config" |\
@@ -69,15 +72,29 @@ if [[ "$google_analytics_enabled" = true ]]; then
     setup_google_analytics
 fi
 
+# TODO: make sure database is running
 ckan-paster --plugin=ckanext-googleanalytics initdb -c "$config" 
 ckan-paster --plugin=ckan db init -c "$config"
 ckan-paster --plugin=ckanext-spatial spatial initdb -c "$config"
 ckan-paster --plugin=ckanext-harvest harvester initdb -c "$config"
 
+db_q="SELECT 1 FROM pg_database WHERE datname='pycsw'"
+if [[ -z "$(psql -h db -tAc "$db_q")" ]]; then
+   createdb -h db -U ckan pycsw -E utf-8
+fi
+
+psql -h db -U ckan -qc 'CREATE EXTENSION IF NOT EXISTS postgis' pycsw
+
+tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
+if [[ -z "$(psql -h db -tAc "$tbl_q" pycsw)" ]]; then
+    ckan-paster --plugin=ckanext-spatial ckan-pycsw setup -p \
+        /etc/pycsw/pycsw.cfg
+fi
+
 ckan-paster --plugin=ckan config-tool "$config" \
                     "ckan.harvest.mq.type = redis" \
                     "ckan.harvest.mq.hostname = redis" \
-                    "ckanext.harvest.default_dataset_name_append = random-hex"
+                    "ckanext.harvest.default_dataset_name_append = random-hex" \
                     "ckan.spatial.validator.profiles = iso19139ngdc" \
                     "ckanext.spatial.search_backend = solr" \
                     "ckan.spatial.harvest.continue_on_validation_errors = true"

@@ -22,6 +22,7 @@ RUN ckan-pip install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" && \
+    # fixme: update pycsw version
     ckan-pip install --no-cache pycsw==1.8.6 Shapely==1.5.17 OWSLib==0.16.0 \
                                 lxml==3.6.2
 # the above appears to be necessary to run separately, or otherwise it results
@@ -29,7 +30,8 @@ RUN ckan-pip install --no-cache-dir \
 
 COPY ./contrib/scripts/check_plugins.bash /check_plugins.bash
 RUN chmod +x /check_plugins.bash
-COPY ./contrib/config/pycsw/default.cfg /etc/pycsw/pycsw.cfg
+# PyCSW config is hardcoded for the time being
+COPY ./contrib/config/pycsw/pycsw.cfg /etc/pycsw/pycsw.cfg
 ENTRYPOINT ["/check_plugins.bash"]
 USER ckan
 
