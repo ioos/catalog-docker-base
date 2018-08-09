@@ -73,14 +73,14 @@ ckan-paster --plugin=ckanext-spatial spatial initdb -c "$config"
 ckan-paster --plugin=ckanext-harvest harvester initdb -c "$config"
 
 db_q="SELECT 1 FROM pg_database WHERE datname='pycsw'"
-if [[ -z "$(psql -h db -tAc "$db_q")" ]]; then
+if [[ -z "$(psql -h db -U ckan -tAc "$db_q")" ]]; then
    createdb -h db -U ckan pycsw -E utf-8
 fi
 
 psql -h db -U ckan -qc 'CREATE EXTENSION IF NOT EXISTS postgis' pycsw
 
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
-if [[ -z "$(psql -h db -tAc "$tbl_q" pycsw)" ]]; then
+if [[ -z "$(psql -h db -U ckan -tAc "$tbl_q" pycsw)" ]]; then
     ckan-paster --plugin=ckanext-spatial ckan-pycsw setup -p \
         /etc/pycsw/pycsw.cfg
 fi
