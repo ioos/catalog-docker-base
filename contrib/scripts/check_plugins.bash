@@ -7,6 +7,12 @@ set -e
 google_analytics_enabled=${GA_ENABLED:-}
 config="/etc/ckan/production.ini"
 
+# temporarily alias exec to true so we can "extend" this entrypoint
+alias exec=true
+# source the original entrypoint with aliased exec
+. /ckan-entrypoint.sh
+unalias exec
+
 ckan-paster --plugin=ckan config-tool "$config" \
     "googleanalytics.id=${GA_ID:-none}" \
     "googleanalytics.account=${GA_ACCOUNT:-none}" \
@@ -24,12 +30,6 @@ function setup_google_analytics {
             "googleanalytics.track_events=true"
        ckan-paster --plugin=ckanext-googleanalytics initdb -c "$config"
 }
-
-# temporarily alias exec to true so we can "extend" this entrypoint
-alias exec=true
-# source the original entrypoint with aliased exec
-. /ckan-entrypoint.sh
-unalias exec
 
 if [[ -v POSTGRES_PASSWORD ]]; then
     export PGPASSWORD="$POSTGRES_PASSWORD"
