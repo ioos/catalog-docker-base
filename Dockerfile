@@ -1,4 +1,4 @@
-FROM docker_ckan:2.8.0
+FROM ioos/ckan:2.8.0
 
 USER root
 # Add my custom configuration file
@@ -15,7 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN ckan-pip install --no-cache-dir \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics \
-       -e git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext-spatial \
+       -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
        -e git+https://github.com/ioos/catalog-ckan.git@1.2.2#egg=ckanext-ioos-theme &&\
     ckan-pip install --no-cache-dir \
