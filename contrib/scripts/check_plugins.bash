@@ -7,11 +7,8 @@ set -e
 google_analytics_enabled=${GA_ENABLED:-}
 config="/etc/ckan/production.ini"
 
-# temporarily alias exec to true so we can "extend" this entrypoint
-alias exec=true
-# source the original entrypoint with aliased exec
-. /ckan-entrypoint.sh
-unalias exec
+# source the original CKAN entrypoint without the final call to exec
+. <(grep -v '^exec' /ckan-entrypoint.sh)
 
 ckan-paster --plugin=ckan config-tool "$config" \
     "googleanalytics.id=${GA_ID:-none}" \
