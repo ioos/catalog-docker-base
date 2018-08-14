@@ -7,6 +7,7 @@ To run, please have `docker` and `docker-compose` installed and run the
 following in this order:
 
 ```sh
+git clone --recurse-submodules https://github.com/ioos/catalog-docker-base.git@new_ckan_version_draft
 cd compose_build/
 cp .env.template .env
 ```
@@ -25,3 +26,15 @@ default on the `/csw` endpoint.
 Once the database has been successfully been initialized, you will probably be
 able to start the applications just by using `docker-compose up -d` in
 subsequent invocations.
+
+## Create a superuser
+
+Run `docker exec -it ckan ckan-paster --plugin ckan sysadmin add <username> -c /etc/production.ini`
+to add a superuser to CKAN.
+
+### Optional: Load harvester config
+
+Run `docker exec ckan /opt/fixtures/set_harvests.bash <API_KEY>` in order to
+load up the default IOOS harvests.  The API key for a particular user can be
+found on the user account page of the CKAN website, and must have sufficient
+privileges to create groups/organizations.
