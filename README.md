@@ -38,3 +38,10 @@ Run `docker exec ckan bash /opt/fixture_data/set_harvests.bash <API_KEY>` in ord
 load up the default IOOS harvests.  The API key for a particular user can be
 found on the user account page of the CKAN website, and must have sufficient
 privileges to create groups/organizations.
+
+Lastly, run `crontab -e` and add the following line to ensure the harvester
+is periodically run:
+
+```sh
+*/2 * * * * docker exec /usr/lib/ckan/venv/bin/paster --plugin=ckanext-harvest harvester -c /etc/ckan/production.ini run
+```
