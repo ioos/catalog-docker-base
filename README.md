@@ -34,7 +34,7 @@ to add a superuser to CKAN.
 
 ### Optional: Load harvester config
 
-Run `docker exec ckan /opt/fixtures/set_harvests.bash <API_KEY>` in order to
+Run `docker exec ckan bash /opt/fixture_data/set_harvests.bash <API_KEY>` in order to
 load up the default IOOS harvests.  The API key for a particular user can be
 found on the user account page of the CKAN website, and must have sufficient
 privileges to create groups/organizations.
