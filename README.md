@@ -43,5 +43,5 @@ Lastly, run `crontab -e` and add the following line to ensure the harvester
 is periodically run:
 
 ```sh
-*/2 * * * * docker exec /usr/lib/ckan/venv/bin/paster --plugin=ckanext-harvest harvester -c /etc/ckan/production.ini run
+*/2 * * * * docker exec ckan /usr/lib/ckan/venv/bin/paster --plugin=ckanext-harvest harvester -c /etc/ckan/production.ini run
 ```
