@@ -10,6 +10,9 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y git libgeos-dev libxml2
 # CKAN spatial extension has no tagged Git releases currently, so freeze the
 # version at a known good commit to prevent breakage from later versions
 
+# The prior image built upon was pretty old, so make sure the certificates
+# are updated, so Python pip packages properly install, etc.
+RUN $CKAN_HOME/bin/pip install certifi>=2018.8.24
 RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-spatial.git#egg=ckanext-spatial
 RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-spatial/pip-requirements.txt
 
@@ -28,7 +31,7 @@ RUN "$CKAN_HOME/bin/pip" install --upgrade pip
 RUN "$CKAN_HOME/bin/pip" install -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics && \
     "$CKAN_HOME/bin/pip" install -r "$CKAN_HOME/src/ckanext-googleanalytics/requirements.txt"
 
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@1.2.2#egg=ckanext-ioos-theme
+RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@1.2.3#egg=ckanext-ioos-theme
 
 # Set CKAN_INIT 
 ENV CKAN_INIT="true"
