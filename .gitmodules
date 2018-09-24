@@ -1,0 +1,4 @@
+[submodule ".base_ckan"]
+	path = .base_ckan
+	url = git@github.com:benjwadams/ckan.git
+	branch = new_compose_test

@@ -1,55 +1,41 @@
-# main ckan repo does not use versioning and could break, use Luke's version 
-# which freezes version
-FROM ioos/ckan:1.0.0
+FROM ioos/ckan:2.8.1
 
-# Install git
-RUN DEBIAN_FRONTEND=noninteractive apt-get update -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -q -y git libgeos-dev libxml2-dev libxslt1-dev supervisor postgresql-client
-
-# Install the CKAN Spatial extension
-# CKAN spatial extension has no tagged Git releases currently, so freeze the
-# version at a known good commit to prevent breakage from later versions
-
-# The prior image built upon was pretty old, so make sure the certificates
-# are updated, so Python pip packages properly install, etc.
-RUN $CKAN_HOME/bin/pip install certifi>=2018.8.24
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-spatial.git#egg=ckanext-spatial
-RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-spatial/pip-requirements.txt
-
-# must use this commit or similar as tagged versions cause "Add harvests" page
-# to display no fields.  Harvests may also fail to initialize, delete, or run
-# possibly due to breaking API changes.
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/ckanext-harvest.git@catalog_compat#egg=ckanext-harvest
-RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-harvest/pip-requirements.txt
-
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/benjwadams/pycsw.git@link_split_fix_1.10.5#egg=pycsw
-RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/pycsw/requirements.txt
-
-RUN "$CKAN_HOME/bin/pip" install --upgrade pip
-
-# optional, but ships with the image by default
-RUN "$CKAN_HOME/bin/pip" install -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics && \
-    "$CKAN_HOME/bin/pip" install -r "$CKAN_HOME/src/ckanext-googleanalytics/requirements.txt"
-
-RUN $CKAN_HOME/bin/pip install -e git+https://github.com/ioos/catalog-ckan.git@1.2.3#egg=ckanext-ioos-theme
-
-# Set CKAN_INIT 
-ENV CKAN_INIT="true"
-
-
+USER root
 # Add my custom configuration file
-COPY ./contrib/config/pycsw/default.cfg $CKAN_HOME/src/pycsw/default.cfg
-COPY ./contrib/config/pycsw/pycsw.wsgi $CKAN_CONFIG/pycsw.wsgi
+COPY ["./contrib/config/pycsw/default.cfg" \
+      "./contrib/config/pycsw/pycsw.wsgi" "$CKAN_CONFIG/"]
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
+                                   apt-get install -q -y git libgeos-dev \
+                                                        libxml2-dev \
+                                                         libxslt1-dev && \
+                                   apt-get -q clean && \
+                                   rm -rf /var/lib/apt/lists/*
 
+# pip install must be run with -e and then requirements manually installed
+# in order for most CKAN plugins to work!
+RUN ckan-pip install --no-cache-dir \
+       -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
+       -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
+       -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
+       -e git+https://github.com/ioos/catalog-ckan.git@1.3.0#egg=ckanext-ioos-theme && \
+    ckan-pip install --no-cache-dir \
+       -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
+       -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" \
+       -r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" && \
+    # fixme: update pycsw version
+    ckan-pip install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
+                                    OWSLib==0.16.0 lxml==3.6.2 && \
+    pip install ckanapi
 
-# Configure nginx
-COPY ./contrib/config/nginx.conf /etc/nginx/nginx.conf
+# the above appears to be necessary to run separately, or otherwise it results
+# in a double requirements error with the above requirements files
 
-COPY ./contrib/my_init.d /etc/my_init.d
-COPY ./contrib/supervisor/conf.d /etc/supervisor/conf.d
+COPY ./contrib/scripts/check_plugins.bash /
+COPY ./contrib/fixture_data /opt/fixture_data
+RUN chmod +x /check_plugins.bash /opt/fixture_data/set_harvests.bash
+# PyCSW config is hardcoded for the time being
+COPY ./contrib/config/pycsw/pycsw.cfg /etc/pycsw/pycsw.cfg
+ENTRYPOINT ["/check_plugins.bash"]
+USER ckan
 
-COPY ./contrib/services /bin/services
-COPY ./contrib/scripts /scripts
-
-# run the init script
-CMD ["/sbin/my_init"]
+CMD ["ckan-paster","serve","/etc/ckan/production.ini"]
