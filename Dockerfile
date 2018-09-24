@@ -14,10 +14,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 # pip install must be run with -e and then requirements manually installed
 # in order for most CKAN plugins to work!
 RUN ckan-pip install --no-cache-dir \
-       -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics \
+       -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
-       -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/catalog-ckan.git@update_new_ckan#egg=ckanext-ioos-theme && \
+       -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
+       -e git+https://github.com/ioos/catalog-ckan.git@1.3.0#egg=ckanext-ioos-theme && \
     ckan-pip install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" \
