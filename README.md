@@ -7,7 +7,7 @@ To run, please have `docker` and `docker-compose` installed and run the
 following in this order:
 
 ```sh
-git clone --recurse-submodules -b new_ckan_version_draft https://github.com/ioos/catalog-docker-base.git
+git clone --recurse-submodules https://github.com/ioos/catalog-docker-base.git
 cd compose_build/
 cp .env.template .env
 ```
