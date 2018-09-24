@@ -1,4 +1,4 @@
 [submodule ".base_ckan"]
 	path = .base_ckan
-	url = git@github.com:benjwadams/ckan.git
-	branch = new_compose_test
+	url = git@github.com:ioos/ckan.git
+	branch = ioos_2.8.1_modifications
