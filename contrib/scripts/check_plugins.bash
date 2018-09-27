@@ -5,6 +5,7 @@ set -e
 # exit with true to ensure the
 
 google_analytics_enabled=${GA_ENABLED:-}
+pycsw_default_db=${PYCSW_DB:-pycsw}
 config="/etc/ckan/production.ini"
 
 # source the original CKAN entrypoint without the final call to exec
@@ -69,15 +70,16 @@ ckan-paster --plugin=ckan db init -c "$config"
 ckan-paster --plugin=ckanext-spatial spatial initdb -c "$config"
 ckan-paster --plugin=ckanext-harvest harvester initdb -c "$config"
 
-db_q="SELECT 1 FROM pg_database WHERE datname='pycsw'"
+db_q="SELECT 1 FROM pg_database WHERE datname='$pycsw_default_db'"
 if [[ -z "$(psql -h db -U ckan -tAc "$db_q")" ]]; then
-   createdb -h db -U ckan pycsw -E utf-8
+   createdb -h db -U ckan "$pycsw_default_db" -E utf-8
 fi
 
-psql -h db -U ckan -qc 'CREATE EXTENSION IF NOT EXISTS postgis' pycsw
+psql -h db -U ckan -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_db"
 
+# make sure /etc/pycsw/pycsw.cfg has correct DB set
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
-if [[ -z "$(psql -h db -U ckan -tAc "$tbl_q" pycsw)" ]]; then
+if [[ -z "$(psql -h db -U ckan -tAc "$tbl_q" "$pycsw_default_db")" ]]; then
     ckan-paster --plugin=ckanext-spatial ckan-pycsw setup -p \
         /etc/pycsw/pycsw.cfg
 fi
