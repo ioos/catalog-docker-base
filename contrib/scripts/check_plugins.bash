@@ -93,6 +93,30 @@ ckan-paster --plugin=ckan config-tool "$config" \
                     "ckan.harvest.mq.hostname = redis" \
                     "ckan.spatial.validator.profiles = iso19139ngdc" \
                     "ckanext.spatial.search_backend = solr" \
-                    "ckan.spatial.harvest.continue_on_validation_errors = true"
+                    "ckan.spatial.harvest.continue_on_validation_errors = true" \
+                    "ckan.ioos_theme.pycsw_config=/etc/pycsw/pycsw.cfg" \
+                    "ckan.cors.origin_allow_all = true"
+
+if [ -n "$MAIL_SERVER" ]; then
+  ckan-paster --plugin=ckan config-tool $CONFIG "smtp.server = $MAIL_SERVER"
+fi
+if [ -n "$MAIL_PORT" ]; then
+  ckan-paster --plugin=ckan config-tool $CONFIG "smtp.port = $MAIL_PORT"
+fi
+if [ -n "$MAIL_USE_TLS" ]; then
+  ckan-paster --plugin=ckan config-tool $CONFIG "smtp.starttls = $MAIL_USE_TLS"
+fi
+if [ -n "$MAIL_USERNAME" ]; then
+  ckan-paster --plugin=ckan config-tool $CONFIG "smtp.user = $MAIL_USERNAME"
+fi
+if [ -n "$MAIL_PASSWORD" ]; then
+  ckan-paster --plugin=ckan config-tool $CONFIG "smtp.password = $MAIL_PASSWORD"
+fi
+if [ -n "$MAIL_FROM" ]; then
+  ckan-paster --plugin=ckan config-tool $CONFIG "smtp.mail_from = $MAIL_FROM"
+fi
+if [ -n "$FEEDBACK_RECIPIENTS" ]; then
+  ckan-paster --plugin=ckan config-tool $CONFIG "feedback.recipients = $FEEDBACK_RECIPIENTS"
+fi
 
 exec "$@"
