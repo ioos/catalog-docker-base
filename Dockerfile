@@ -1,8 +1,8 @@
-FROM ioos/ckan:2.8.1
+FROM ioos/ckan:2.8.1-solr-temporal-extents
 
 USER root
 # Add my custom configuration file
-COPY ["./contrib/config/pycsw/default.cfg" "$CKAN_CONFIG/"]
+COPY "./contrib/config/pycsw/pycsw.cfg" "$CKAN_CONFIG/"
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
                                    apt-get install -q -y git libgeos-dev \
                                                         libxml2-dev \
@@ -16,7 +16,7 @@ RUN ckan-pip install --no-cache-dir \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/catalog-ckan.git@1.3.1#egg=ckanext-ioos-theme && \
+       -e git+https://github.com/ioos/catalog-ckan.git@draft_time_search#egg=ckanext-ioos-theme && \
     ckan-pip install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" \
