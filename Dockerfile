@@ -16,7 +16,7 @@ RUN ckan-pip install --no-cache-dir \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/catalog-ckan.git@draft_time_search#egg=ckanext-ioos-theme && \
+       -e git+https://github.com/ioos/catalog-ckan.git@time_search_rev_1#egg=ckanext-ioos-theme && \
     ckan-pip install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" \
