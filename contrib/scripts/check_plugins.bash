@@ -87,8 +87,6 @@ if [[ -z "$(psql -h db -p "$db_port" -U ckan -tAc "$tbl_q"
 fi
 
 ckan-paster --plugin=ckan config-tool "$config" \
-                    "ckan.base_public_folder = public-bs2" \
-                    "ckan.base_templates_folder = templates-bs2" \
                     "ckan.site_title = IOOS Catalog" \
                     "ckan.site_logo = /ioos_logo.png" \
                     "ckan.harvest.mq.type = redis" \
