@@ -85,7 +85,7 @@ psql -h db -U ckan -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_
 
 # make sure /etc/pycsw/pycsw.cfg has correct DB set
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
-if [[ -z "$(psql -h db -p "$db_port" -U ckan -tAc "$tbl_q"
+if [[ -z "$(psql -h db -p "$db_port" -U ckan -tAc "$tbl_q" \
      "$pycsw_default_db")" ]]; then
     ckan-paster --plugin=ckanext-spatial ckan-pycsw setup -p \
         /etc/pycsw/pycsw.cfg
