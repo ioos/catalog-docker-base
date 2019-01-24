@@ -1,9 +1,8 @@
-FROM ioos/ckan:2.8.1
+FROM ioos/ckan:2.8.1-solr-temporal-extents
 
 USER root
 # Add my custom configuration file
-COPY ["./contrib/config/pycsw/default.cfg" \
-      "./contrib/config/pycsw/pycsw.wsgi" "$CKAN_CONFIG/"]
+COPY "./contrib/config/pycsw/pycsw.cfg" "$CKAN_CONFIG/"
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
                                    apt-get install -q -y git libgeos-dev \
                                                         libxml2-dev \
@@ -13,15 +12,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 
 # pip install must be run with -e and then requirements manually installed
 # in order for most CKAN plugins to work!
-RUN ckan-pip install --no-cache-dir \
+RUN ckan-pip install --no-cache-dir --upgrade pip 'certifi>=2018.10.15' && \
+    ckan-pip install --no-cache-dir --trusted-host files.pythonhosted.org \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/catalog-ckan.git@1.3.0#egg=ckanext-ioos-theme && \
+       -e git+https://github.com/ckan/ckanext-dcat.git@v0.0.8#egg=ckanext-dcat \
+       -e git+https://github.com/ioos/catalog-ckan.git@time_search_rev_1#egg=ckanext-ioos-theme && \
     ckan-pip install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" \
-       -r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" && \
+       -r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" \
+       -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" && \
     # fixme: update pycsw version
     ckan-pip install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
                                     OWSLib==0.16.0 lxml==3.6.2 && \
