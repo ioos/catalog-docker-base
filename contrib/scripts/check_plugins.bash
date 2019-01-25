@@ -96,6 +96,7 @@ ckan-paster --plugin=ckan config-tool "$config" \
                     "ckan.site_logo = /ioos_logo.png" \
                     "ckan.harvest.mq.type = redis" \
                     "ckan.harvest.mq.hostname = redis" \
+                    "ckan.harvest.mq.port = ${REDIS_PORT:-6379}" \
                     "ckan.spatial.validator.profiles = iso19139ngdc" \
                     "ckanext.spatial.search_backend = solr" \
                     "ckan.spatial.harvest.continue_on_validation_errors = true" \
