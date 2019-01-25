@@ -81,7 +81,7 @@ if [[ -z "$(psql -h db -p "$db_port" -U ckan -tAc "$db_q")" ]]; then
    createdb -h db -p "$db_port" -U ckan "$pycsw_default_db" -E utf-8
 fi
 
-psql -h db -U ckan -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_db"
+psql -h db -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_db"
 
 # make sure /etc/pycsw/pycsw.cfg has correct DB set
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
