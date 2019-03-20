@@ -53,6 +53,7 @@ dcat_rdf_harvester
 dcat_json_harvester
 dcat_json_interface
 structured_data
+sitemap
 EOF
 ) | tr "\n" ' ' | sed 's/ $//')
 
@@ -81,7 +82,7 @@ if [[ -z "$(psql -h db -p "$db_port" -U ckan -tAc "$db_q")" ]]; then
    createdb -h db -p "$db_port" -U ckan "$pycsw_default_db" -E utf-8
 fi
 
-psql -h db -U ckan -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_db"
+psql -h db -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_db"
 
 # make sure /etc/pycsw/pycsw.cfg has correct DB set
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
@@ -96,6 +97,7 @@ ckan-paster --plugin=ckan config-tool "$config" \
                     "ckan.site_logo = /ioos_logo.png" \
                     "ckan.harvest.mq.type = redis" \
                     "ckan.harvest.mq.hostname = redis" \
+                    "ckan.harvest.mq.port = ${REDIS_PORT:-6379}" \
                     "ckan.spatial.validator.profiles = iso19139ngdc" \
                     "ckanext.spatial.search_backend = solr" \
                     "ckan.spatial.harvest.continue_on_validation_errors = true" \
