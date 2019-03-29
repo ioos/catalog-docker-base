@@ -1,8 +1,10 @@
-FROM ioos/ckan:2.8.1-solr-temporal-extents
+FROM ioos/ckan:2.8.2
 
 USER root
 # Add my custom configuration file
 COPY "./contrib/config/pycsw/pycsw.cfg" "$CKAN_CONFIG/"
+# BWA (2019-03-29) need to update debian jessie sources for updates
+COPY "./contrib/config/sources.list" "/etc/apt/sources.list"
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
                                    apt-get install -q -y git libgeos-dev \
                                                         libxml2-dev \
@@ -20,7 +22,7 @@ RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-dcat.git@v0.0.8#egg=ckanext-dcat \
-       -e git+https://github.com/ioos/catalog-ckan.git@1.3.3#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/catalog-ckan.git@f7646df01b00e569fb016b328a810d50a69f5164#egg=ckanext-ioos-theme \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap && \
     ckan-pip install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
