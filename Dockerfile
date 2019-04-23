@@ -15,14 +15,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 # pip install must be run with -e and then requirements manually installed
 # in order for most CKAN plugins to work!
 RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
-    ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' && \
-    ckan-pip install --no-cache-dir 'pendulum>=2.0.3' && \
+    ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' \
+                                              'setuptools' && \
+    ckan-pip install --no-cache-dir 'pendulum==2.0.3' && \
     ckan-pip install --no-cache-dir --trusted-host files.pythonhosted.org \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-dcat.git@v0.0.8#egg=ckanext-dcat \
-       -e git+https://github.com/ioos/catalog-ckan.git@d26d2b4adba516305fbda6536ba9ab33ae495e4c#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/catalog-ckan.git@9ae86d006f6045e230721e463eb5e9b32df8e1f2#egg=ckanext-ioos-theme \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap && \
     ckan-pip install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
