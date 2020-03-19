@@ -5,6 +5,7 @@ USER root
 COPY "./contrib/config/pycsw/pycsw.cfg" "$CKAN_CONFIG/"
 # BWA (2019-03-29) need to update debian jessie sources for updates
 COPY "./contrib/config/sources.list" "/etc/apt/sources.list"
+COPY "./contrib/scripts/" "/usr/local/bin/"
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
                                    apt-get install -q -y git libgeos-dev \
                                                         libxml2-dev \
