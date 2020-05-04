@@ -24,7 +24,7 @@ RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-dcat.git@v0.0.8#egg=ckanext-dcat \
-       -e git+https://github.com/ioos/catalog-ckan.git@ec04c103868366e2b19dec66cc62d4d716307a97#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/catalog-ckan.git@ae3f87910b07432ba6dd961b8b52c100c510d18e#egg=ckanext-ioos-theme \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
        -e git+https://github.com/ckan/ckanext-showcase@v1.2.0#egg=ckanext-showcase && \
     ckan-pip install --no-cache-dir \
