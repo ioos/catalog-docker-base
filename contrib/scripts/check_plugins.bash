@@ -5,6 +5,11 @@ set -e
 # exit with true to ensure the
 
 google_analytics_enabled="${GA_ENABLED:-}"
+if [[ $CKAN_SQLALCHEMY_URL ~= @([^/:]+) ]]; then
+   db_host=${BASH_CAPTURE[1]}
+else
+   db_host=db
+fi
 pycsw_default_db="${PYCSW_DB:-pycsw}"
 db_port="${POSTGRES_PORT:-5432}"
 config="/etc/ckan/production.ini"
