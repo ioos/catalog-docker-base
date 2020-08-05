@@ -34,6 +34,8 @@ RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
        -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" && \
     ckan-pip install -r "$CKAN_VENV/src/ckanext-sitemap/requirements.txt" && \
     ckan-pip install -U -e git+https://github.com/benjwadams/pycsw.git@link_split_fix_1.10.5#egg=pycsw && \
+     # exclude ckanext-sitemap requirement as it clashes with the already
+     # installed lxml version
     # fixme: update pycsw version
     ckan-pip install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
                                     OWSLib==0.16.0 lxml==3.6.2 && \

@@ -63,8 +63,8 @@ dcat_rdf_harvester
 dcat_json_harvester
 dcat_json_interface
 showcase
-sitemap
 structured_data
+sitemap
 EOF
 ) | tr "\n" ' ' | sed 's/ $//')
 
