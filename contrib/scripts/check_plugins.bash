@@ -5,8 +5,8 @@ set -e
 # exit with true to ensure the
 
 google_analytics_enabled="${GA_ENABLED:-}"
-if [[ $CKAN_SQLALCHEMY_URL ~= @([^/:]+) ]]; then
-   db_host=${BASH_CAPTURE[1]}
+if [[ $CKAN_SQLALCHEMY_URL =~ @([^/:]+) ]]; then
+   db_host=${BASH_REMATCH[1]}
 else
    db_host=db
 fi
@@ -89,15 +89,15 @@ ckan-paster --plugin=ckanext-spatial spatial initdb -c "$config"
 ckan-paster --plugin=ckanext-harvest harvester initdb -c "$config"
 
 db_q="SELECT 1 FROM pg_database WHERE datname='$pycsw_default_db'"
-if [[ -z "$(psql -h db -p "$db_port" -U ckan -tAc "$db_q")" ]]; then
-   createdb -h db -p "$db_port" -U ckan "$pycsw_default_db" -E utf-8
+if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$db_q")" ]]; then
+   createdb -h "$db_host" -p "$db_port" -U ckan "$pycsw_default_db" -E utf-8
 fi
 
-psql -h db -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_db"
+psql -h "$db_host" -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS postgis' "$pycsw_default_db"
 
 # make sure /etc/pycsw/pycsw.cfg has correct DB set
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
-if [[ -z "$(psql -h db -p "$db_port" -U ckan -tAc "$tbl_q" \
+if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
      "$pycsw_default_db")" ]]; then
     ckan-paster --plugin=ckanext-spatial ckan-pycsw setup -p \
         /etc/pycsw/pycsw.cfg
