@@ -7,9 +7,10 @@ COPY "./contrib/config/pycsw/pycsw.cfg" "$CKAN_CONFIG/"
 COPY "./contrib/config/sources.list" "/etc/apt/sources.list"
 COPY "./contrib/scripts/" "/usr/local/bin/"
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
-                                   apt-get install -q -y git libgeos-dev \
+                                   apt-get install -q --force-yes -y git libgeos-dev \
                                                         libxml2-dev \
-                                                         libxslt1-dev && \
+                                                         libxslt1-dev \
+                                                         libudunits2-dev && \
                                    apt-get -q clean && \
                                    rm -rf /var/lib/apt/lists/*
 
@@ -17,8 +18,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
     ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' \
-                                              'setuptools' && \
-    ckan-pip install --no-cache-dir 'pendulum==2.0.3' && \
+                                              'setuptools' Cython && \
+    ckan-pip install --no-cache-dir 'pendulum==2.0.3' cf_units && \
     ckan-pip install --no-cache-dir --trusted-host files.pythonhosted.org \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
@@ -33,12 +34,11 @@ RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
        -r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" && \
     ckan-pip install -r "$CKAN_VENV/src/ckanext-sitemap/requirements.txt" && \
-    ckan-pip install -U -e git+https://github.com/benjwadams/pycsw.git@link_split_fix_1.10.5#egg=pycsw && \
+    ckan-pip install -U -e git+https://github.com/benjwadams/pycsw.git@link_split_fix_2.2.0#egg=pycsw && \
      # exclude ckanext-sitemap requirement as it clashes with the already
      # installed lxml version
     # fixme: update pycsw version
-    ckan-pip install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
-                                    OWSLib==0.16.0 lxml==3.6.2 && \
+    ckan-pip install --no-cache-dir lxml>=3.6.2 && \
     pip install ckanapi
 
 # the above appears to be necessary to run separately, or otherwise it results
