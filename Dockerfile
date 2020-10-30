@@ -1,4 +1,4 @@
-FROM ioos/ckan:2.8.4
+FROM ioos/ckan:2.8.6
 
 USER root
 # Add my custom configuration file
@@ -9,8 +9,8 @@ COPY "./contrib/scripts/" "/usr/local/bin/"
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
                                    apt-get install -q --force-yes -y git libgeos-dev \
                                                         libxml2-dev \
-                                                         libxslt1-dev \
-                                                         libudunits2-dev && \
+                                                        libxslt1-dev \
+                                                        libudunits2-dev && \
                                    apt-get -q clean && \
                                    rm -rf /var/lib/apt/lists/*
 
@@ -18,14 +18,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
     ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' \
-                                              'setuptools' Cython && \
+                                              'setuptools' wheel Cython && \
     ckan-pip install --no-cache-dir 'pendulum==2.0.3' cf_units && \
     ckan-pip install --no-cache-dir --trusted-host files.pythonhosted.org \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-dcat.git@v0.0.8#egg=ckanext-dcat \
-       -e git+https://github.com/ioos/catalog-ckan.git@feaef0364f8598ff3c8b549a14a47b369d0f1ad0#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/catalog-ckan.git@d2c0d1b4f77ddd7588feb77a204a758a0e9fb9f4#egg=ckanext-ioos-theme \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
        -e git+https://github.com/ckan/ckanext-showcase@v1.2.0#egg=ckanext-showcase && \
     ckan-pip install --no-cache-dir \
@@ -39,7 +39,7 @@ RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
      # installed lxml version
     # fixme: update pycsw version
     ckan-pip install --no-cache-dir lxml>=3.6.2 && \
-    pip install ckanapi
+    ckan-pip install ckanapi
 
 # the above appears to be necessary to run separately, or otherwise it results
 # in a double requirements error with the above requirements files
