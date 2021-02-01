@@ -16,8 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 
 # pip install must be run with -e and then requirements manually installed
 # in order for most CKAN plugins to work!
-RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
-    ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' \
+RUN ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' \
                                               'setuptools' wheel Cython && \
     ckan-pip install --no-cache-dir 'pendulum==2.0.3' cf_units && \
     ckan-pip install --no-cache-dir --trusted-host files.pythonhosted.org \
@@ -25,7 +24,7 @@ RUN wget 'https://bootstrap.pypa.io/get-pip.py' && python get-pip.py && \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-dcat.git@v0.0.8#egg=ckanext-dcat \
-       -e git+https://github.com/ioos/catalog-ckan.git@d2c0d1b4f77ddd7588feb77a204a758a0e9fb9f4#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/ckanext-ioos-theme.git@1fcb38211c66bc408391b16945a128848088769e#egg=ckanext-ioos-theme \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
        -e git+https://github.com/ckan/ckanext-showcase@v1.2.0#egg=ckanext-showcase && \
     ckan-pip install --no-cache-dir \
