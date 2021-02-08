@@ -24,7 +24,7 @@ RUN ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git@v1.1.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-dcat.git@v0.0.8#egg=ckanext-dcat \
-       -e git+https://github.com/ioos/ckanext-ioos-theme.git@1fcb38211c66bc408391b16945a128848088769e#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/catalog-ckan.git@62d4778754d22f5b7f2a5cb6f0c835cc95353ae8#egg=ckanext-ioos-theme \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
        -e git+https://github.com/ckan/ckanext-showcase@v1.2.0#egg=ckanext-showcase && \
     ckan-pip install --no-cache-dir \
