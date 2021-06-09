@@ -5,7 +5,8 @@ set -x
 # first load the original ckan entrypoint
 # exit with true to ensure the
 
-google_analytics_enabled="${GA_ENABLED:-}"
+google_analytics_enabled=${GA_ENABLED:-}
+pycsw_default_db=${PYCSW_DB:-pycsw}
 if [[ $CKAN_SQLALCHEMY_URL =~ @([^/:]+) ]]; then
    db_host=${BASH_REMATCH[1]}
 else
@@ -13,6 +14,12 @@ else
 fi
 pycsw_default_db="${PYCSW_DB:-pycsw}"
 db_port="${POSTGRES_PORT:-5432}"
+config="/etc/ckan/production.ini"
+
+# Set default site_url
+if [[ -z "$CKAN_SITE_URL" ]]; then
+  CKAN_SITE_URL="http://localhost"
+fi
 config="/etc/ckan/production.ini"
 
 # Set default site_url
@@ -74,8 +81,6 @@ if [[ -n "$missing_plugins" ]]; then
                           "ckan.plugins = $new_plugins_line"
 fi
 
-#ckan-paster --plugin=ckan config-tool "$config" "ckan.tracking_enabled = true"
-
 ckan config-tool "$config" "ckan.tracking_enabled = true"
 if [[ "$google_analytics_enabled" = true ]]; then
     setup_google_analytics
@@ -96,8 +101,7 @@ psql -h "$db_host" -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS pos
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
 if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
      "$pycsw_default_db")" ]]; then
-    ckan ckan-pycsw setup -p \
-        /etc/pycsw/pycsw.cfg
+    ckan -c "$config" spatial ckan-pycsw setup -p /etc/pycsw/pycsw.cfg
 fi
 
 ckan config-tool "$config" \

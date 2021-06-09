@@ -46,10 +46,12 @@ RUN ckan-pip3 install --no-cache-dir -U pip && \
 
 COPY ./contrib/scripts/check_plugins.bash /
 COPY ./contrib/fixture_data /opt/fixture_data
+COPY ./contrib/solr/schema.xml /usr/lib/ckan/venv/src/ckan/ckan/config/solr/
 RUN chmod +x /check_plugins.bash /opt/fixture_data/set_harvests.bash
 # PyCSW config is hardcoded for the time being
 COPY ./contrib/config/pycsw/pycsw.cfg /etc/pycsw/pycsw.cfg
 ENTRYPOINT ["/check_plugins.bash"]
 USER ckan
 
-CMD ["ckan-paster","serve","/etc/ckan/production.ini"]
+EXPOSE 5000
+CMD ["ckan","-c","/etc/ckan/production.ini", "run", "--host", "0.0.0.0"]
