@@ -68,9 +68,10 @@ dcat
 dcat_rdf_harvester
 dcat_json_harvester
 dcat_json_interface
-showcase
-structured_data
+metocean_keywords
 sitemap
+structured_data
+temporal
 EOF
 ) | tr "\n" ' ' | sed 's/ $//')
 
@@ -101,7 +102,7 @@ psql -h "$db_host" -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS pos
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
 if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
      "$pycsw_default_db")" ]]; then
-    ckan -c "$config" spatial ckan-pycsw setup -p /etc/pycsw/pycsw.cfg
+    ckan -c "$config" spatial ckan_pycsw setup -p /etc/pycsw/pycsw.cfg
 fi
 
 ckan config-tool "$config" \
