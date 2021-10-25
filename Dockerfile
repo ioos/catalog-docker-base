@@ -37,11 +37,11 @@ RUN ckan-pip3 install --no-cache-dir -U pip && \
        -e git+https://github.com/ckan/ckanext-harvest.git@master#egg=ckanext-harvest \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.3#egg=ckanext-harvest \
        -e git+https://github.com/benjwadams/ckanext-temporal.git@develop#egg=ckanext-temporal \
-       -e git+https://github.com/benjwadams/ckanext-metocean-keywords.git#egg=ckanext-metocean-keywords \
+       -e git+https://github.com/benjwadams/ckanext-metocean-keywords.git#egg=ckanext-metocean-keywords
        #-e git+https://github.com/ckan/ckanext-showcase@v1.4.3#egg=ckanext-showcase && \
 
 RUN ckan-pip3 install --no-cache-dir \
-       -r "$CKAN_VENV/src/ckanext-spatial/pip-requirements.txt" \
+       -r "$CKAN_VENV/src/ckanext-spatial/requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" && \
        #-r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" && \
        #-r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" \
@@ -57,7 +57,7 @@ RUN ckan-pip3 install --no-cache-dir \
 
 COPY ./contrib/scripts/check_plugins.bash /
 COPY ./contrib/fixture_data /opt/fixture_data
-COPY ./contrib/solr/schema.xml /usr/lib/ckan/venv/src/ckan/ckan/config/solr/
+COPY ./.base_ckan/ckan/config/solr/schema.xml /usr/lib/ckan/venv/src/ckan/ckan/config/solr/
 RUN chmod +x /check_plugins.bash /opt/fixture_data/set_harvests.bash
 # PyCSW config is hardcoded for the time being
 COPY ./contrib/config/pycsw/pycsw.cfg /etc/pycsw/pycsw.cfg
