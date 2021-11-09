@@ -18,7 +18,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN ckan-pip install --no-cache-dir --upgrade 'certifi>=2018.10.15' \
                                               'setuptools' wheel Cython && \
-    ckan-pip install --no-cache-dir 'pendulum==2.0.3' cf_units && \
+    ckan-pip install --no-cache-dir 'pendulum==2.0.3' 'cf_units==2.1.4' && \
     ckan-pip install --no-cache-dir --trusted-host files.pythonhosted.org \
        -e git+https://github.com/ckan/ckanext-googleanalytics.git@v2.0.2#egg=ckanext-googleanalytics \
        -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
