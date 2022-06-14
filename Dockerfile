@@ -3,41 +3,37 @@ FROM ckan/ckan
 USER root
 # Add my custom configuration file
 COPY "./contrib/config/pycsw/pycsw.cfg" "$CKAN_CONFIG/"
-# BWA (2019-03-29) need to update debian jessie sources for updates
-COPY "./contrib/config/sources.list" "/etc/apt/sources.list"
 COPY "./contrib/scripts/" "/usr/local/bin/"
-RUN DEBIAN_FRONTEND=noninteractive apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 9D6D8F6BC857C906 && \
-                                   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys AA8E81B4331F7F50 && \
-                                   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8B48AD6246925553 && \
-                                   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7638D0442B90D010 && \
-                                   apt-key adv --keyserver keyserver.ubuntu.com --recv-keys CBF8D6FD518E17E1 && \
-                                   apt-get update -y && \
-                                   apt-get install -q --force-yes -y git libgeos-dev \
-                                                        libxml2-dev \
-                                                        libxslt1-dev \
-                                                        zlib1g-dev \
-                                                        libudunits2-dev && \
-                                                        #zlib1g=1:1.2.8.dfsg-2+deb8u1 \
-                                                        #zlib1g-dev=1:1.2.8.dfsg-2+deb8u1 && \
-                                   apt-get -q clean && \
-                                   rm -rf /var/lib/apt/lists/*
+RUN apt-get update -y && \
+    #apt-get install -y debian-archive-keyring && \
+    apt-get install -q --force-yes -y git libgeos-dev \
+                         libxml2-dev \
+                         libxslt1-dev \
+                         zlib1g-dev \
+                         libudunits2-dev && \
+                         #zlib1g=1:1.2.8.dfsg-2+deb8u1 \
+                         #zlib1g-dev=1:1.2.8.dfsg-2+deb8u1 && \
+    apt-get -q clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # pip install must be run with -e and then requirements manually installed
 # in order for most CKAN plugins to work!
 RUN ckan-pip3 install --no-cache-dir -U pip && \
   ckan-pip3 install --no-cache-dir \
-       wheel && \ 
+       wheel flask_debugtoolbar && \ 
        ckan-pip3 install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        #ckan-pip3 install -e git+https://github.com/ckan/ckanext-spatial.git@smellman-dev-py3#egg=ckanext-spatial \
        #-e git+https://github.com/ckan/ckanext-spatial.git@master#egg=ckanext-spatial \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.1#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/ckanext-ioos-theme.git@master#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
+       -e git+https://github.com/benjwadams/catalog_ckan.git@revert_webassets#egg=ckanext-ioos-theme \
+       #-e git+https://github.com/benjwadams/ckanext-ioos-theme.git@remove_metocean_keywords#egg=ckanext-ioos-theme \
        -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
-       -e git+https://github.com/ckan/ckanext-harvest.git@master#egg=ckanext-harvest \
+       #-e git+https://github.com/ckan/ckanext-harvest.git@master#egg=ckanext-harvest \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.3#egg=ckanext-harvest \
-       -e git+https://github.com/benjwadams/ckanext-temporal.git@develop#egg=ckanext-temporal \
-       -e git+https://github.com/benjwadams/ckanext-metocean-keywords.git@test#egg=ckanext-metocean-keywords
+       #-e git+https://github.com/benjwadams/ckanext-temporal.git@develop#egg=ckanext-temporal \
+       -e git+https://github.com/benjwadams/ckanext-metocean-keywords.git@debug_assets#egg=ckanext-metocean-keywords
        #-e git+https://github.com/ckan/ckanext-showcase@v1.4.3#egg=ckanext-showcase && \
 
 RUN ckan-pip3 install --no-cache-dir \

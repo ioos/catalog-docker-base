@@ -63,15 +63,12 @@ harvest
 ckan_harvester
 csw_harvester
 waf_harvester
-ioos_waf
 dcat
 dcat_rdf_harvester
 dcat_json_harvester
 dcat_json_interface
-metocean_keywords
 sitemap
 structured_data
-temporal
 EOF
 ) | tr "\n" ' ' | sed 's/ $//')
 
