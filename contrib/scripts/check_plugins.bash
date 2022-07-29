@@ -1,5 +1,4 @@
-#!/bin/bash
-#set -e
+#!/usr/bin/env bash
 set -x
 
 # first load the original ckan entrypoint
@@ -18,14 +17,9 @@ config="/etc/ckan/production.ini"
 
 # Set default site_url
 if [[ -z "$CKAN_SITE_URL" ]]; then
-  CKAN_SITE_URL="http://localhost"
+  CKAN_SITE_URL="http://localhost:5000"
 fi
 config="/etc/ckan/production.ini"
-
-# Set default site_url
-if [[ -z "$CKAN_SITE_URL" ]]; then
-  CKAN_SITE_URL="http://localhost"
-fi
 
 # source the original CKAN entrypoint without the final call to exec
 . <(grep -v '^exec' /ckan-entrypoint.sh)
@@ -99,6 +93,7 @@ psql -h "$db_host" -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS pos
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
 if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
      "$pycsw_default_db")" ]]; then
+    python /usr/lib/ckan/venv/src/ckanext-spatial/bin/ckan_pycsw.py -p /etc/pycsw/pycsw.cfg
     ckan -c "$config" spatial ckan_pycsw setup -p /etc/pycsw/pycsw.cfg
 fi
 
