@@ -38,7 +38,7 @@ RUN ckan-pip3 install --no-cache-dir -U pip && \
 
 RUN ckan-pip3 install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/requirements.txt" \
-       -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" && \
+       -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" pycsw && \
        #-r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" && \
        #-r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" \
     ckan-pip3 install --no-cache-dir -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" && \
