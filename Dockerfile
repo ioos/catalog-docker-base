@@ -19,14 +19,13 @@ RUN apt-get update -y && \
 # pip install must be run with -e and then requirements manually installed
 # in order for most CKAN plugins to work!
 RUN ckan-pip3 install --no-cache-dir -U pip && \
-  ckan-pip3 install --no-cache-dir \
+    ckan-pip3 install --no-cache-dir \
        wheel flask_debugtoolbar && \ 
        ckan-pip3 install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        #ckan-pip3 install -e git+https://github.com/ckan/ckanext-spatial.git@smellman-dev-py3#egg=ckanext-spatial \
-       #-e git+https://github.com/ckan/ckanext-spatial.git@master#egg=ckanext-spatial \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
-       -e git+https://github.com/benjwadams/catalog_ckan.git@revert_webassets#egg=ckanext-ioos-theme \
+       -e git+https://github.com/benjwadams/ckanext-ioos-theme.git@revert_webassets#egg=ckanext-ioos-theme \
        #-e git+https://github.com/benjwadams/ckanext-ioos-theme.git@remove_metocean_keywords#egg=ckanext-ioos-theme \
        -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat \
        -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
@@ -38,7 +37,8 @@ RUN ckan-pip3 install --no-cache-dir -U pip && \
 
 RUN ckan-pip3 install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-spatial/requirements.txt" \
-       -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" pycsw && \
+       -r "$CKAN_VENV/src/ckanext-ioos-theme/requirements.txt" \
+       -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" pycsw cf-units && \
        #-r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" && \
        #-r "$CKAN_VENV/src/ckanext-googleanalytics/requirements.txt" \
     ckan-pip3 install --no-cache-dir -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" && \
