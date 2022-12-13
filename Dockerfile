@@ -1,4 +1,4 @@
-FROM ckan/ckan
+FROM docker_ckan
 
 USER root
 # Add my custom configuration file
@@ -25,18 +25,17 @@ RUN ckan-pip3 install --no-cache-dir -U pip && \
        #ckan-pip3 install -e git+https://github.com/ckan/ckanext-spatial.git@smellman-dev-py3#egg=ckanext-spatial \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
-       -e git+https://github.com/benjwadams/ckanext-ioos-theme.git@revert_webassets#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/ckanext-ioos-theme.git@2b6fedc#egg=ckanext-ioos-theme \
        #-e git+https://github.com/benjwadams/ckanext-ioos-theme.git@remove_metocean_keywords#egg=ckanext-ioos-theme \
        -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat \
-       -e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
+       #-e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
        #-e git+https://github.com/ckan/ckanext-harvest.git@master#egg=ckanext-harvest \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.3#egg=ckanext-harvest \
-       #-e git+https://github.com/benjwadams/ckanext-temporal.git@develop#egg=ckanext-temporal \
-       -e git+https://github.com/benjwadams/ckanext-metocean-keywords.git@debug_assets#egg=ckanext-metocean-keywords
        #-e git+https://github.com/ckan/ckanext-showcase@v1.4.3#egg=ckanext-showcase && \
 
 RUN ckan-pip3 install --no-cache-dir \
-       -r "$CKAN_VENV/src/ckanext-spatial/requirements.txt" \
+       -r "$CKAN_VENV/src/ckanext-spatial/requirements.txt" && \
+    ckan-pip3 install --no-cache-dir \
        -r "$CKAN_VENV/src/ckanext-ioos-theme/requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-harvest/pip-requirements.txt" \
        -r "$CKAN_VENV/src/ckanext-dcat/requirements.txt" pycsw cf-units && \
