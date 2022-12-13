@@ -1,10 +1,11 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -x
 
 # first load the original ckan entrypoint
 # exit with true to ensure the
 
-google_analytics_enabled="${GA_ENABLED:-}"
+google_analytics_enabled=${GA_ENABLED:-}
+pycsw_default_db=${PYCSW_DB:-pycsw}
 if [[ $CKAN_SQLALCHEMY_URL =~ @([^/:]+) ]]; then
    db_host=${BASH_REMATCH[1]}
 else
@@ -16,13 +17,14 @@ config="/etc/ckan/production.ini"
 
 # Set default site_url
 if [[ -z "$CKAN_SITE_URL" ]]; then
-  CKAN_SITE_URL="http://localhost"
+  CKAN_SITE_URL="http://localhost:5000"
 fi
+config="/etc/ckan/production.ini"
 
 # source the original CKAN entrypoint without the final call to exec
 . <(grep -v '^exec' /ckan-entrypoint.sh)
 
-ckan-paster --plugin=ckan config-tool "$config" \
+ckan config-tool "$config" \
     "googleanalytics.id=${GA_ID:-none}" \
     "googleanalytics.account=${GA_ACCOUNT:-none}" \
     "googleanalytics.username=${GA_USERNAME:-none}" \
@@ -31,13 +33,12 @@ ckan-paster --plugin=ckan config-tool "$config" \
 
 
 function setup_google_analytics {
-       ckan-paster --plugin=ckan config-tool "$config" \
+       ckan config-tool "$config" \
             "googleanalytics.id=${GA_ID}" \
             "googleanalytics.account=${GA_ACCOUNT}" \
             "googleanalytics.username=${GA_USERNAME}" \
             "googleanalytics.password=${GA_PASSWORD}" \
             "googleanalytics.track_events=true"
-       ckan-paster --plugin=ckanext-googleanalytics initdb -c "$config"
 }
 
 if [[ -v POSTGRES_PASSWORD ]]; then
@@ -56,37 +57,29 @@ harvest
 ckan_harvester
 csw_harvester
 waf_harvester
-ioos_waf
-googleanalytics
 dcat
 dcat_rdf_harvester
 dcat_json_harvester
 dcat_json_interface
-showcase
 structured_data
-sitemap
 EOF
 ) | tr "\n" ' ' | sed 's/ $//')
 
 if [[ -n "$missing_plugins" ]]; then
     new_plugins_line="$plugins_orig $missing_plugins"
 
-    ckan-paster --plugin=ckan config-tool "$config" -e \
+    ckan config-tool "$config" -e \
                           "ckan.plugins = $new_plugins_line"
 fi
 
-#ckan-paster --plugin=ckan config-tool "$config" "ckan.tracking_enabled = true"
-
-ckan-paster --plugin=ckan config-tool "$config" "ckan.tracking_enabled = true"
+ckan config-tool "$config" "ckan.tracking_enabled = true"
 if [[ "$google_analytics_enabled" = true ]]; then
     setup_google_analytics
 fi
 
 # TODO: make sure database is running
-ckan-paster --plugin=ckanext-googleanalytics initdb -c "$config"
-ckan-paster --plugin=ckan db init -c "$config"
-ckan-paster --plugin=ckanext-spatial spatial initdb -c "$config"
-ckan-paster --plugin=ckanext-harvest harvester initdb -c "$config"
+ckan -c "$config" spatial initdb
+ckan -c "$config" harvester initdb
 
 db_q="SELECT 1 FROM pg_database WHERE datname='$pycsw_default_db'"
 if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$db_q")" ]]; then
@@ -99,11 +92,11 @@ psql -h "$db_host" -U ckan -p "$db_port" -qc 'CREATE EXTENSION IF NOT EXISTS pos
 tbl_q="SELECT 1 FROM information_schema.tables WHERE table_name = 'records'"
 if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
      "$pycsw_default_db")" ]]; then
-    ckan-paster --plugin=ckanext-spatial ckan-pycsw setup -p \
-        /etc/pycsw/pycsw.cfg
+    python /usr/lib/ckan/venv/src/ckanext-spatial/bin/ckan_pycsw.py -p /etc/pycsw/pycsw.cfg
+    ckan -c "$config" spatial ckan_pycsw setup -p /etc/pycsw/pycsw.cfg
 fi
 
-ckan-paster --plugin=ckan config-tool "$config" \
+ckan config-tool "$config" \
                     "ckan.site_title = IOOS Catalog" \
                     "ckan.site_logo = /ioos_logo.png" \
                     "ckan.harvest.mq.type = redis" \
@@ -119,25 +112,25 @@ ckan-paster --plugin=ckan config-tool "$config" \
                     "ckan.cors.origin_allow_all = true"
 
 if [ -n "$MAIL_SERVER" ]; then
-  ckan-paster --plugin=ckan config-tool "$CONFIG" "smtp.server = $MAIL_SERVER"
+  ckan config-tool "$CONFIG" "smtp.server = $MAIL_SERVER"
 fi
 if [ -n "$MAIL_PORT" ]; then
-  ckan-paster --plugin=ckan config-tool "$CONFIG" "smtp.port = $MAIL_PORT"
+  ckan config-tool "$CONFIG" "smtp.port = $MAIL_PORT"
 fi
 if [ -n "$MAIL_USE_TLS" ]; then
-  ckan-paster --plugin=ckan config-tool "$CONFIG" "smtp.starttls = $MAIL_USE_TLS"
+  ckan config-tool "$CONFIG" "smtp.starttls = $MAIL_USE_TLS"
 fi
 if [ -n "$MAIL_USERNAME" ]; then
-  ckan-paster --plugin=ckan config-tool "$CONFIG" "smtp.user = $MAIL_USERNAME"
+  ckan config-tool "$CONFIG" "smtp.user = $MAIL_USERNAME"
 fi
 if [ -n "$MAIL_PASSWORD" ]; then
-  ckan-paster --plugin=ckan config-tool "$CONFIG" "smtp.password = $MAIL_PASSWORD"
+  ckan config-tool "$CONFIG" "smtp.password = $MAIL_PASSWORD"
 fi
 if [ -n "$MAIL_FROM" ]; then
-  ckan-paster --plugin=ckan config-tool "$CONFIG" "smtp.mail_from = $MAIL_FROM"
+  ckan config-tool "$CONFIG" "smtp.mail_from = $MAIL_FROM"
 fi
 if [ -n "$FEEDBACK_RECIPIENTS" ]; then
-  ckan-paster --plugin=ckan config-tool "$CONFIG" "feedback.recipients = $FEEDBACK_RECIPIENTS"
+  ckan config-tool "$CONFIG" "feedback.recipients = $FEEDBACK_RECIPIENTS"
 fi
 
 exec "$@"

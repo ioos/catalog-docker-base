@@ -4,15 +4,15 @@ api_key=${1?The API key must be set}
 # first, try to load the organizations
 
 ckanapi load organizations -I "$(dirname "$0")/default_organizations.jsonl" \
-        -r http://localhost:5000 -a "$api_key" 
+        -r http://localhost:5000 -a "$api_key"
 
 # pretty slow right now
 
 while IFS='@' read title group url; do
-  if /usr/lib/ckan/venv/bin/paster --plugin ckanext-harvest harvester source "${group}-waf" -c /etc/ckan/production.ini  > /dev/null 2>&1; then
-  echo "${group}-waf already exists"
-  else 
-    /usr/lib/ckan/venv/bin/paster --plugin ckanext-harvest harvester source "${group}-waf" "$url" 'ioos_waf' "$title WAF" 'true' "$group" 'DAILY' '' -c /etc/ckan/production.ini
+  if ckan -c /etc/ckan/production.ini harvester source show "${group}-waf"  > /dev/null 2>&1; then
+    echo "${group}-waf already exists"
+  else
+    ckan -c /etc/ckan/production.ini harvester source create "${group}-waf" "$url" 'ioos_waf' "$title WAF" 'true' "$group" 'DAILY' ''
   fi
 done <<EOF
 Glider DAC@glider-dac@https://registry.ioos.us/waf/Glider%20DAC/
