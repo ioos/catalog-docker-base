@@ -96,11 +96,7 @@ services:
 
   solr:
     container_name: solr
-    image: ckan/ckan-solr:2.9
-    #build:
-    #  context: ../main_ckan_docker/
-    #  #context: ../../
-    #  dockerfile: contrib/docker/solr/Dockerfile
+    image: ckan/ckan-solr:2.9-solr8-spatial
     volumes:
       - solr_core_data:/opt/solr/server/solr/ckan
     ports:

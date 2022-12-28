@@ -21,13 +21,13 @@ RUN apt-get update -y && \
 RUN ckan-pip3 install --no-cache-dir -U pip && \
     ckan-pip3 install --no-cache-dir \
        wheel flask_debugtoolbar && \ 
-       ckan-pip3 install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
+    ckan-pip3 install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        #ckan-pip3 install -e git+https://github.com/ckan/ckanext-spatial.git@smellman-dev-py3#egg=ckanext-spatial \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/ckanext-ioos-theme.git@2b6fedc#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/ckanext-ioos-theme.git@02d13e72308b2f1a6426759766498f89f6f5ee3e#egg=ckanext-ioos-theme \
        #-e git+https://github.com/benjwadams/ckanext-ioos-theme.git@remove_metocean_keywords#egg=ckanext-ioos-theme \
-       -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat \
+       -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat
        #-e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
        #-e git+https://github.com/ckan/ckanext-harvest.git@master#egg=ckanext-harvest \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.3#egg=ckanext-harvest \
