@@ -1,0 +1,41 @@
+Unidata WAF@unidata@http://thredds.axiomdatascience.com/iso/unidata/
+NANOOS WAF@nanoos@http://data.nanoos.org/metadata/coastwatcherded/osuclm/
+CARICOOS WAF@caricoos@http://52.55.221.16/WAF/caricoos/iso/
+MARACOOS WAF@maracoos@http://tds.maracoos.org/iso/
+NERACOOS UMAINE WAF@neracoos@http://www.neracoos.org/WAF/UMaine/iso/
+Glider DAC WAF@glider-dac@https://data.ioos.us/gliders/metadata/
+CeNCOOS WAF@cencoos@http://thredds.cencoos.org/iso/
+AOOS WAF@aoos@http://thredds.aoos.org/iso/
+IOOS RA Portal WAF@ioos@https://data.ioos.us/mwengren/ioos/
+NERACOOS BIO WAF@neracoos@http://www.neracoos.org/WAF/BIO/iso/
+NANOOS TDS WAF@nanoos@http://data.nanoos.org/metadata/ioos/thredds/
+NANOOS 52NSOS WAF@nanoos@http://data.nanoos.org/metadata/ioos/52nsos/
+SCCOOS WAF@sccoos@https://sccoos.org/dr/metadata/ioos/
+CDIP WAF@cdip@http://cdip.ucsd.edu/data_access/metadata/ioos_registry/
+COMT WAF@comt@http://comt.sura.org/WAF/
+CO-OPS ERDDAP@noaa-co-ops@https://opendap.co-ops.nos.noaa.gov/erddap/metadata/iso19115/xml/
+NERACOOS NECOFS WAF@neracoos@http://www.neracoos.org/WAF/UMASSD-SMAST/Forecasts/iso/
+NERACOOS ERDDAP@neracoos@http://www.neracoos.org/erddap/metadata/iso19115/xml/
+SECOORA WAF@secoora@http://thredds.secoora.org/iso/
+CO-OPS WAF@noaa-co-ops@https://data.ioos.us/stations/waf/co-ops/
+NDBC WAF@noaa-ndbc@https://data.ioos.us/stations/waf/ndbc/
+HF Radar SCRIPPS DAC@hf-radar-dac@https://sccoos.org/dr/metadata/ioos/hfradar/
+HF Radar NDBC DAC@hf-radar-dac@https://data.ioos.us/stations/waf/hf_radar_dac_ndbc/
+NERACOOS UMAINE REALTIME@neracoos@http://www.neracoos.org/WAF/UMaine/Realtime/iso/
+GCOOS WAF@gcoos@http://data.gcoos.org/data/waf/iso/
+GCOOS ERDDAP Biological@gcoos@https://gcoos4.tamu.edu/erddap/metadata/iso19115/xml/
+US Navy WAF@us-navy@http://thredds.axiomdatascience.com/iso/oceannomads/
+USGS CS-W@usgs@https://www.sciencebase.gov/catalog/item/579b64c6e4b0589fa1c98118/csw
+PacIOOS WAF@pacioos@http://www.pacioos.hawaii.edu/metadata/iso/
+CeNCOOS ERDDAP@cencoos@https://erddap.cencoos.org/erddap/metadata/iso19115/xml/
+MARACOOS Stevens WAF@maracoos@https://data.ioos.us/stations/waf/stevens/
+SECOORA ERDDAP@secoora@http://erddap.secoora.org/erddap/metadata/iso19115/xml/
+AOOS ERDDAP@aoos@https://erddap.aoos.org/erddap/metadata/iso19115/xml/
+GCOOS ERDDAP Oceanographic@gcoos@https://erddap.gcoos.org/erddap/metadata/iso19115/xml/
+GLOS CS-W@glos@http://data.glos.us/metadata/srv/eng/csw
+NANOOS ERDDAP WAF@nanoos@https://data.nanoos.org/erddap/metadata/iso19115/xml/
+MARACOOS ERDDAP@maracoos@https://erddap.maracoos.org/erddap/metadata/iso19115/xml/
+GLOS TDS WAF@glos@http://data.glos.us/waf/
+CARICOOS ERDDAP SERVER ISO WAF@caricoos@http://dm2.caricoos.org/erddap/metadata/iso19115/xml/
+SCCOOS ERDDAP@sccoos@https://erddap.sccoos.org/erddap/metadata/iso19115/xml/
+GCOOS WAF Historical@gcoos@https://gcoos5.geos.tamu.edu/erddap/metadata/iso19115/xml/
