@@ -97,6 +97,8 @@ if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
 fi
 
 ckan config-tool "$config" \
+                    "ckan.auth.create_user_via_api = false" \
+                    "ckan.auth.create_user_via_web = false" \
                     "ckan.site_title = IOOS Catalog" \
                     "ckan.site_logo = /ioos_logo.png" \
                     "ckan.harvest.mq.type = redis" \
