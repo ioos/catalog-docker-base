@@ -19,8 +19,8 @@ NERACOOS ERDDAP@neracoos@http://www.neracoos.org/erddap/metadata/iso19115/xml/
 SECOORA WAF@secoora@http://thredds.secoora.org/iso/
 CO-OPS WAF@noaa-co-ops@https://data.ioos.us/stations/waf/co-ops/
 NDBC WAF@noaa-ndbc@https://data.ioos.us/stations/waf/ndbc/
-HF Radar SCRIPPS DAC@hf-radar-dac@https://sccoos.org/dr/metadata/ioos/hfradar/
-HF Radar NDBC DAC@hf-radar-dac@https://data.ioos.us/stations/waf/hf_radar_dac_ndbc/
+HF Radar SCRIPPS DAC@hf-radar dac@https://sccoos.org/dr/metadata/ioos/hfradar/
+HF Radar NDBC DAC@hf-radar dac@https://data.ioos.us/stations/waf/hf_radar_dac_ndbc/
 NERACOOS UMAINE REALTIME@neracoos@http://www.neracoos.org/WAF/UMaine/Realtime/iso/
 GCOOS WAF@gcoos@http://data.gcoos.org/data/waf/iso/
 GCOOS ERDDAP Biological@gcoos@https://gcoos4.tamu.edu/erddap/metadata/iso19115/xml/
