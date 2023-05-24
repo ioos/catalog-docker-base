@@ -3,8 +3,7 @@
 # Delete any harvest jobs
 
 while IFS= read -r id; do
-    ckan-paster --plugin=ckanext-harvest harvester \
-         -c /etc/ckan/production.ini job_abort "$id";
+    ckan -c /etc/ckan/production.ini harvester job-abort "$id";
 done < <(psql -h "${DB_HOST:-db}" -U ckan -qAt -c "SELECT id FROM harvest_job WHERE status = 'Running' AND gather_started <= NOW() - '3 day'::interval")
 
-ckan-paster --plugin=ckanext-harvest harvester -c /etc/ckan/production.ini job-all
+ckan -c /etc/ckan/production.ini harvester job-all
