@@ -29,7 +29,7 @@ subsequent invocations.
 
 ## Create a superuser
 
-Run `docker exec -it ckan ckan-paster --plugin ckan sysadmin add <username> -c /etc/ckan/production.ini`
+Run `docker exec -it ckan ckan -c /etc/ckan/production.ini sysadmin add <username>`
 to add a superuser to CKAN.
 
 ### Optional: Load harvester config
@@ -43,5 +43,5 @@ Lastly, run `crontab -e` and add the following line to ensure the harvester
 is periodically run:
 
 ```sh
-*/2 * * * * docker exec ckan /usr/lib/ckan/venv/bin/paster --plugin=ckanext-harvest harvester -c /etc/ckan/production.ini run
+*/2 * * * * docker exec ckan ckan -c /etc/ckan/production.ini harvester run
 ```
