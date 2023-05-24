@@ -25,7 +25,7 @@ RUN ckan-pip3 install --no-cache-dir -U pip && \
        #ckan-pip3 install -e git+https://github.com/ckan/ckanext-spatial.git@smellman-dev-py3#egg=ckanext-spatial \
        #-e git+https://github.com/ckan/ckanext-harvest.git@v1.3.1#egg=ckanext-harvest \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/ckanext-ioos-theme.git@2d44041f4a0023b6a13539631cedd28c5658e998#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/ckanext-ioos-theme.git@8a78e545ddb582f4aa5dbb0d546144db31eb25c2#egg=ckanext-ioos-theme \
        #-e git+https://github.com/benjwadams/ckanext-ioos-theme.git@remove_metocean_keywords#egg=ckanext-ioos-theme \
        -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat
        #-e git+https://github.com/ioos/ckanext-sitemap@no_rev_time_handle#egg=ckanext-sitemap \
