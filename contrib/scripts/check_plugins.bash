@@ -106,7 +106,7 @@ ckan config-tool "$config" \
                     "ckan.harvest.mq.port = ${REDIS_PORT:-6379}" \
                     "ckan.spatial.validator.profiles = iso19139ngdc" \
                     "ckanext.spatial.common_map.type = custom" \
-                    "ckanext.spatial.common_map.custom.url = https://services.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}" \
+                    "ckanext.spatial.common_map.custom.url = https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}" \
                     "ckanext.spatial.common_map.attribution = Esri, Garmin, GEBCO, NOAA NGDC, and other contributors" \
                     "ckanext.spatial.search_backend = solr-spatial-field" \
                     "ckan.spatial.harvest.continue_on_validation_errors = true" \
