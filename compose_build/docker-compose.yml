@@ -44,9 +44,11 @@ services:
       - ckan_storage:/var/lib/ckan
     #command: ckan --plugin=ckan serve /etc/ckan/production.ini
     #command: ckan-paster --plugin=ckan serve /etc/ckan/production.ini
-    #command: ckan -c /etc/ckan/production.ini run --host 0.0.0.0
     #entrypoint: sleep 999999
-    #command: sleep 9999
+    healthcheck:
+      test: curl --fail localhost:5000 || exit 1
+      timeout: 25s
+    command: ckan -c /etc/ckan/production.ini run --host 0.0.0.0
 
   ckan_gather_harvester:
      <<: *ckan_app
@@ -55,6 +57,8 @@ services:
      ports: []
      depends_on:
        - ckan
+     healthcheck:
+       disable: true
 
   ckan_fetch_harvester:
      <<: *ckan_app
@@ -63,6 +67,8 @@ services:
      ports: []
      depends_on:
        - ckan
+     healthcheck:
+       disable: true
 
   pycsw:
     container_name: pycsw_gmd_hotfix
