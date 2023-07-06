@@ -12,11 +12,9 @@ volumes:
 services:
   ckan: &ckan_app
     image: ioos/catalog-docker-base
-    #image: ioos/ckan:2.9.1
-    #build:
-    #  context: .
     user: root
     container_name: ckan
+    restart: always
     ports:
       - "0.0.0.0:${CKAN_PORT}:5000"
     environment:
