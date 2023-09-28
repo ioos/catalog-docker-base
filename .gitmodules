@@ -1,4 +1,4 @@
 [submodule ".base_ckan"]
 	path = .base_ckan
-	url = https://github.com/ioos/ckan.git
-	branch = ioos_2.8.2_modifications
+	url = git@github.com:ckan/ckan-docker.git
+	branch = master
