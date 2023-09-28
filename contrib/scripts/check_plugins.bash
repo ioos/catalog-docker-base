@@ -13,13 +13,13 @@ else
 fi
 pycsw_default_db="${PYCSW_DB:-pycsw}"
 db_port="${POSTGRES_PORT:-5432}"
-config="/etc/ckan/production.ini"
+config="/srv/app/production.ini"
 
 # Set default site_url
 if [[ -z "$CKAN_SITE_URL" ]]; then
   CKAN_SITE_URL="http://localhost:5000"
 fi
-config="/etc/ckan/production.ini"
+config="/srv/app/production.ini"
 
 # source the original CKAN entrypoint without the final call to exec
 . <(grep -v '^exec' /ckan-entrypoint.sh)

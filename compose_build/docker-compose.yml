@@ -44,12 +44,12 @@ services:
     healthcheck:
       test: curl --fail localhost:5000 || exit 1
       timeout: 25s
-    command: ckan -c /etc/ckan/production.ini run --host 0.0.0.0
+    command: ckan -c /srv/app/production.ini run --host 0.0.0.0
 
   ckan_gather_harvester:
      <<: *ckan_app
      container_name: ckan_gather_harvester
-     command: ckan -c /etc/ckan/production.ini harvester gather-consumer
+     command: ckan -c /srv/app/production.ini harvester gather-consumer
      ports: []
      depends_on:
        - ckan
@@ -59,7 +59,7 @@ services:
   ckan_fetch_harvester:
      <<: *ckan_app
      container_name: ckan_fetch_harvester
-     command: ckan -c /etc/ckan/production.ini harvester fetch-consumer
+     command: ckan -c /srv/app/production.ini harvester fetch-consumer
      ports: []
      depends_on:
        - ckan
