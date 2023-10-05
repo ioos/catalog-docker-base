@@ -43,9 +43,8 @@ RUN pip install --no-cache-dir \
 
 COPY ./contrib/scripts/check_plugins.bash /
 COPY ./contrib/fixture_data /opt/fixture_data
-COPY ./.base_ckan/ckan/config/solr/schema.xml /usr/lib/ckan/venv/src/ckan/ckan/config/solr/
+COPY ./contrib/solr/schema.xml /usr/lib/ckan/venv/src/ckan/ckan/config/solr/
 RUN chmod +x /check_plugins.bash /opt/fixture_data/set_harvests.bash
-RUN rm -rf "/srv/app/src/ckan/ckanext/datastore/"
 # PyCSW config is hardcoded for the time being
 COPY ./contrib/config/pycsw/pycsw.cfg /etc/pycsw/pycsw.cfg
 ENTRYPOINT ["/check_plugins.bash"]

@@ -3,7 +3,6 @@
 version: "3"
 
 volumes:
-  ckan_config:
   pycsw_config:
   ckan_storage:
   pg_data:
@@ -16,31 +15,25 @@ services:
     container_name: ckan
     restart: always
     ports:
-      - "0.0.0.0:${CKAN_PORT}:5000"
+      - "0.0.0.0:5000:5000"
     environment:
       # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
-      - CKAN_SQLALCHEMY_URL=postgresql://ckan:${POSTGRES_PASSWORD}@${CKAN_DB}/ckan
-      # does not work due to firewall
-      # datapusher URL required even though not used.
-      - CKAN_DATAPUSHER_URL=http://datapusher:8800
-      - CKAN_DATASTORE_WRITE_URL=postgresql://ckan:${POSTGRES_PASSWORD}@db/datastore
-      - CKAN_DATASTORE_READ_URL=postgresql://datastore_ro:${DATASTORE_READONLY_PASSWORD}@db/datastore
+      - POSTGRES_PASSWORD=changeme
+      - CKAN_SQLALCHEMY_URL=postgresql://ckan:changeme@db/ckan
+      - SECRET_KEY=
+      # TODO: the section of check_plugins.bash that reviews the plugins is
+      # likely redundant with this new envvar
+      # Keitaro CKAN image also allows for postinstall hooks, which may
+      # be worthwhile investigating
+      - CKAN__PLUGINS=envvars image_view text_view recline_view ckan_harvester csw_harvester dcat dcat_json_harvester dcat_json_interface dcat_rdf_harvester harvest ioos_theme spatial_metadata spatial_query structured_data waf_harvester
       - CKAN_SOLR_URL=http://solr:8983/solr/ckan
       - CKAN_REDIS_URL=redis://redis:6379/1
-      - CKAN_SITE_URL=${CKAN_SITE_URL}
-      - CKAN_MAX_UPLOAD_SIZE_MB=${CKAN_MAX_UPLOAD_SIZE_MB}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
+      # Enable on production. Missing keys on dev cause issues starting container
       - GA_ENABLED=false
 
     volumes:
-      #- /home/badams/devel/catalog-ckan/ckanext/ioos_theme/:/usr/lib/ckan/venv/src/ckanext-ioos-theme/ckanext/ioos_theme/
-      - ckan_config:/etc/ckan
       - pycsw_config:/etc/pycsw
       - ckan_storage:/var/lib/ckan
-    #command: ckan --plugin=ckan serve /etc/ckan/production.ini
-    #command: ckan-paster --plugin=ckan serve /etc/ckan/production.ini
-    #entrypoint: sleep 999999
     healthcheck:
       test: curl --fail localhost:5000 || exit 1
       timeout: 25s
@@ -85,12 +78,11 @@ services:
     build:
       context: ../main_ckan_docker/
       dockerfile: contrib/docker/postgresql/Dockerfile
-      args:
-        - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
-        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     environment:
-      - DS_RO_PASS=${DATASTORE_READONLY_PASSWORD}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PASSWORD=changeme
+      - CKAN_DB_PASSWORD=changeme
+      - CKAN_DB=ckan
+      - CKAN_DB_USER=ckan
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
@@ -98,9 +90,13 @@ services:
 
   solr:
     container_name: solr
-    image: ckan/ckan-solr:2.9-solr8-spatial
+    image: ckan/ckan-solr:2.9-solr9-spatial
+    environment:
+      - SOLR_SCHEMA_FILE=/opt/solr/server/solr/ckan/conf/schema.xml
     volumes:
       - solr_core_data:/opt/solr/server/solr/ckan
+      # could also do Dockerfile COPY here
+      - ../contrib/solr/schema.xml:/opt/solr/server/solr/ckan/conf/schema.xml
     ports:
       - "8983:8983"
 
