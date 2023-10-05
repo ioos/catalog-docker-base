@@ -24,6 +24,8 @@ config="/srv/app/production.ini"
 # source the original CKAN entrypoint without the final call to exec
 . <(grep -v '^exec' /ckan-entrypoint.sh)
 
+# needed for consistent secret key?
+ckan generate config "$config"
 ckan config-tool "$config" \
     "googleanalytics.id=${GA_ID:-none}" \
     "googleanalytics.account=${GA_ACCOUNT:-none}" \
@@ -51,6 +53,7 @@ plugins_orig=$(grep -Po --color '(?<=^ckan\.plugins)\s*=.*$' "$config" |\
 
 missing_plugins=$(comm -13 <(sort <<< "${plugins_orig// /$'\n'}") <(sort <<EOF
 ioos_theme
+ioos_waf
 spatial_metadata
 spatial_query
 harvest
@@ -95,6 +98,9 @@ if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
     python /usr/lib/ckan/venv/src/ckanext-spatial/bin/ckan_pycsw.py -p /etc/pycsw/pycsw.cfg
     ckan -c "$config" spatial ckan_pycsw setup -p /etc/pycsw/pycsw.cfg
 fi
+
+# HACK: eliminate datastore/datapusher from config since it keeps getting added
+sed -ri -e '/ckan\.data(store|pusher)/d' -e 's/data(store|pusher)//' "$config"
 
 ckan config-tool "$config" \
                     "ckan.auth.create_user_via_api = false" \
