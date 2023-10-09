@@ -81,6 +81,16 @@ if [[ "$google_analytics_enabled" = true ]]; then
 fi
 
 # TODO: make sure database is running
+check_user_query="SELECT user FROM user WHERE user = 'ckan'"
+if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$check_user_query" -U postgres)" ]]; then
+    # Potentially could use `createuser` utility here as well
+    psql -h "$db_host" -p "$db_port" -c "CREATE USER ckan WITH PASSWORD '$CKAN_DB_PASSWORD' CREATEDB" -U postgres
+    # assumes DB does not also exist if ckan user does not exist
+    createdb -h "$db_host" -p "$db_port" -U ckan ckan 2> /dev/null
+    psql -h "$db_host" -p "$db_port" -c "CREATE EXTENSION IF NOT EXISTS postgis" ckan postgres
+fi
+
+ckan -c "$config" db init
 ckan -c "$config" spatial initdb
 ckan -c "$config" harvester initdb
 

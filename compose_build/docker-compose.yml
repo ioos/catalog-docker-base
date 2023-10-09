@@ -20,6 +20,7 @@ services:
       # Defaults work with linked containers, change to use own Postgres, SolR, Redis or Datapusher
       - POSTGRES_PASSWORD=changeme
       - CKAN_SQLALCHEMY_URL=postgresql://ckan:changeme@db/ckan
+      - CKAN_DB_PASSWORD=changeme
       - SECRET_KEY=
       # TODO: the section of check_plugins.bash that reviews the plugins is
       # likely redundant with this new envvar
@@ -75,15 +76,11 @@ services:
 
   db:
     container_name: db
-    build:
-      context: ../main_ckan_docker/
-      dockerfile: contrib/docker/postgresql/Dockerfile
+    image: postgis/postgis:12-3.4-alpine
     environment:
       - POSTGRES_PASSWORD=changeme
-      - CKAN_DB_PASSWORD=changeme
       - CKAN_DB=ckan
       - CKAN_DB_USER=ckan
-    volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
