@@ -11,8 +11,6 @@ RUN apt-get update -y && \
                          libxslt1-dev \
                          zlib1g-dev \
                          libudunits2-dev && \
-                         #zlib1g=1:1.2.8.dfsg-2+deb8u1 \
-                         #zlib1g-dev=1:1.2.8.dfsg-2+deb8u1 && \
     apt-get -q clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -23,7 +21,7 @@ RUN pip install --no-cache-dir -U pip && \
        wheel flask_debugtoolbar && \
     pip install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/catalog-ckan.git@a3ef244f3f12ca8f1bc5d60f312860fef0ffcc5e#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ioos/ckanext-ioos-theme.git@main#egg=ckanext-ioos-theme \
        -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat
 
 RUN pip install --no-cache-dir \
