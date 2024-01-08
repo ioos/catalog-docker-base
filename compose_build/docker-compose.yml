@@ -100,7 +100,7 @@ services:
     volumes:
       - solr_core_data:/opt/solr/server/solr/ckan
       # could also do Dockerfile COPY here
-      - "../contrib/solr/schema.xml:/opt/solr/server/solr/configsets/ckan/conf/schema.xml"
+      - ../contrib/solr/schema.xml:/opt/solr/server/solr/configsets/ckan/conf/schema.xml
     ports:
       - "8983:8983"
 
