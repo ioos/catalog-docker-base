@@ -61,6 +61,7 @@ ckan_harvester
 csw_harvester
 waf_harvester
 dcat
+googleanalytics
 dcat_rdf_harvester
 dcat_json_harvester
 dcat_json_interface

@@ -18,10 +18,11 @@ RUN apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN pip install --no-cache-dir -U pip && \
     pip install --no-cache-dir \
-       wheel flask_debugtoolbar && \
+       wheel flask_debugtoolbar oauth2client && \
     pip install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
        -e git+https://github.com/ioos/ckanext-ioos-theme.git@main#egg=ckanext-ioos-theme \
+       -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics \
        -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat
 
 RUN pip install --no-cache-dir \
@@ -29,6 +30,7 @@ RUN pip install --no-cache-dir \
     pip install --no-cache-dir \
        -r "/srv/app/src/ckanext-ioos-theme/requirements.txt" \
        -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" \
+       -r "/srv/app/src/ckanext-googleanalytics/requirements.txt" \
        -r "/srv/app/src/ckanext-dcat/requirements.txt" pycsw cf-units && \
     pip install --no-cache-dir -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" && \
     # fixme: update pycsw version
