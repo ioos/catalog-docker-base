@@ -91,9 +91,6 @@ if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$check_user_query" -U
     psql -h "$db_host" -p "$db_port" -c "CREATE EXTENSION IF NOT EXISTS postgis" ckan postgres
 fi
 
-ckan -c "$config" db init
-ckan -c "$config" spatial initdb
-ckan -c "$config" harvester initdb
 
 db_q="SELECT 1 FROM pg_database WHERE datname='$pycsw_default_db'"
 if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$db_q")" ]]; then
@@ -129,6 +126,11 @@ ckan config-tool "$config" \
                     "ckan.spatial.harvest.continue_on_validation_errors = true" \
                     "ckan.ioos_theme.pycsw_config=/etc/pycsw/pycsw.cfg" \
                     "ckan.cors.origin_allow_all = true"
+
+ckan -c "$config" db init
+ckan -c "$config" spatial initdb
+ckan -c "$config" harvester initdb
+ckan -c "$config" db pending-migrations --apply
 
 if [ -n "$MAIL_SERVER" ]; then
   ckan config-tool "$CONFIG" "smtp.server = $MAIL_SERVER"

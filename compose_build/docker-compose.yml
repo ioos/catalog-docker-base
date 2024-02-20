@@ -91,7 +91,7 @@ services:
 
   solr:
     container_name: solr
-    image: ckan/ckan-solr:2.9-solr9-spatial
+    image: ckan/ckan-solr:2.10-solr9-spatial
     environment:
       # note, SOLR_CONFIG_DIR="/opt/solr/server/solr/configsets" by default
       # TODO: possibly use .env interpolation here instead?
