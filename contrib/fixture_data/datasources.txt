@@ -3,7 +3,7 @@ NANOOS WAF@nanoos@http://data.nanoos.org/metadata/coastwatcherded/osuclm/
 CARICOOS WAF@caricoos@http://52.55.221.16/WAF/caricoos/iso/
 MARACOOS WAF@maracoos@http://tds.maracoos.org/iso/
 NERACOOS UMAINE WAF@neracoos@http://www.neracoos.org/WAF/UMaine/iso/
-Glider DAC WAF@glider-dac@https://data.ioos.us/gliders/metadata/
+Glider DAC WAF@glider-dac@https:/gliders.ioos.us/erddap/metadata/iso19115/xml/
 CeNCOOS WAF@cencoos@http://thredds.cencoos.org/iso/
 AOOS WAF@aoos@http://thredds.aoos.org/iso/
 IOOS RA Portal WAF@ioos@https://data.ioos.us/mwengren/ioos/

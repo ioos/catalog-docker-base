@@ -13,17 +13,19 @@ else
 fi
 pycsw_default_db="${PYCSW_DB:-pycsw}"
 db_port="${POSTGRES_PORT:-5432}"
-config="/etc/ckan/production.ini"
+config="/srv/app/production.ini"
 
 # Set default site_url
 if [[ -z "$CKAN_SITE_URL" ]]; then
   CKAN_SITE_URL="http://localhost:5000"
 fi
-config="/etc/ckan/production.ini"
+config="/srv/app/production.ini"
 
 # source the original CKAN entrypoint without the final call to exec
 . <(grep -v '^exec' /ckan-entrypoint.sh)
 
+# needed for consistent secret key?
+ckan generate config "$config"
 ckan config-tool "$config" \
     "googleanalytics.id=${GA_ID:-none}" \
     "googleanalytics.account=${GA_ACCOUNT:-none}" \
@@ -51,6 +53,7 @@ plugins_orig=$(grep -Po --color '(?<=^ckan\.plugins)\s*=.*$' "$config" |\
 
 missing_plugins=$(comm -13 <(sort <<< "${plugins_orig// /$'\n'}") <(sort <<EOF
 ioos_theme
+ioos_waf
 spatial_metadata
 spatial_query
 harvest
@@ -58,6 +61,7 @@ ckan_harvester
 csw_harvester
 waf_harvester
 dcat
+googleanalytics
 dcat_rdf_harvester
 dcat_json_harvester
 dcat_json_interface
@@ -78,8 +82,15 @@ if [[ "$google_analytics_enabled" = true ]]; then
 fi
 
 # TODO: make sure database is running
-ckan -c "$config" spatial initdb
-ckan -c "$config" harvester initdb
+check_user_query="SELECT user FROM user WHERE user = 'ckan'"
+if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$check_user_query" -U postgres)" ]]; then
+    # Potentially could use `createuser` utility here as well
+    psql -h "$db_host" -p "$db_port" -c "CREATE USER ckan WITH PASSWORD '$CKAN_DB_PASSWORD' CREATEDB" -U postgres
+    # assumes DB does not also exist if ckan user does not exist
+    createdb -h "$db_host" -p "$db_port" -U ckan ckan 2> /dev/null
+    psql -h "$db_host" -p "$db_port" -c "CREATE EXTENSION IF NOT EXISTS postgis" ckan postgres
+fi
+
 
 db_q="SELECT 1 FROM pg_database WHERE datname='$pycsw_default_db'"
 if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$db_q")" ]]; then
@@ -95,6 +106,9 @@ if [[ -z "$(psql -h "$db_host" -p "$db_port" -U ckan -tAc "$tbl_q" \
     python /usr/lib/ckan/venv/src/ckanext-spatial/bin/ckan_pycsw.py -p /etc/pycsw/pycsw.cfg
     ckan -c "$config" spatial ckan_pycsw setup -p /etc/pycsw/pycsw.cfg
 fi
+
+# HACK: eliminate datastore/datapusher from config since it keeps getting added
+sed -ri -e '/ckan\.data(store|pusher)/d' -e 's/data(store|pusher)//' "$config"
 
 ckan config-tool "$config" \
                     "ckan.auth.create_user_via_api = false" \
@@ -112,6 +126,11 @@ ckan config-tool "$config" \
                     "ckan.spatial.harvest.continue_on_validation_errors = true" \
                     "ckan.ioos_theme.pycsw_config=/etc/pycsw/pycsw.cfg" \
                     "ckan.cors.origin_allow_all = true"
+
+ckan -c "$config" db init
+ckan -c "$config" spatial initdb
+ckan -c "$config" harvester initdb
+ckan -c "$config" db pending-migrations --apply
 
 if [ -n "$MAIL_SERVER" ]; then
   ckan config-tool "$CONFIG" "smtp.server = $MAIL_SERVER"

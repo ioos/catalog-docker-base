@@ -11,9 +11,9 @@ ckanapi load organizations -I "$(dirname "$0")/default_organizations.jsonl" \
 while IFS='@' read title group url; do
   source_name=${title,,}
   source_name=${source_name// /-}
-  if ckan -c /etc/ckan/production.ini harvester source show "$source_name"  > /dev/null 2>&1; then
+  if ckan -c /srv/app/production.ini harvester source show "$source_name"  > /dev/null 2>&1; then
     echo "${group}-waf already exists"
   else
-    ckan -c /etc/ckan/production.ini harvester source create "$source_name" "$url" 'ioos_waf' "$title WAF" 'true' "$group" 'DAILY' ''
+    ckan -c /srv/app/production.ini harvester source create "$source_name" "$url" 'ioos_waf' "$title WAF" 'true' "$group" 'DAILY' ''
   fi
 done < datasources.txt
