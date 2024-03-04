@@ -67,6 +67,7 @@ services:
   pycsw:
     container_name: pycsw_gmd_hotfix
     image: geopython/pycsw:latest
+    restart: always
     stdin_open: true
     tty: true
     volumes:
@@ -81,6 +82,7 @@ services:
   db:
     container_name: db
     image: postgis/postgis:12-3.4-alpine
+    restart: always
     environment:
       - POSTGRES_PASSWORD=changeme
       - CKAN_DB=ckan
@@ -92,6 +94,7 @@ services:
   solr:
     container_name: solr
     image: ckan/ckan-solr:2.10-solr9-spatial
+    restart: always
     environment:
       # note, SOLR_CONFIG_DIR="/opt/solr/server/solr/configsets" by default
       # TODO: possibly use .env interpolation here instead?
@@ -107,6 +110,7 @@ services:
   redis:
     container_name: redis
     image: redis:latest
+    restart: always
 
   autoheal:
     restart: always
