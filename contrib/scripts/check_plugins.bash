@@ -127,8 +127,6 @@ ckan config-tool "$config" \
                     "ckan.cors.origin_allow_all = true"
 
 ckan -c "$config" db init
-ckan -c "$config" spatial initdb
-ckan -c "$config" harvester initdb
 ckan -c "$config" db pending-migrations --apply
 
 if [ -n "$MAIL_SERVER" ]; then
