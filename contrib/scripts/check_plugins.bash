@@ -19,7 +19,6 @@ config="/srv/app/production.ini"
 if [[ -z "$CKAN_SITE_URL" ]]; then
   CKAN_SITE_URL="http://localhost:5000"
 fi
-config="/srv/app/production.ini"
 
 # source the original CKAN entrypoint without the final call to exec
 . <(grep -v '^exec' /ckan-entrypoint.sh)
@@ -133,25 +132,25 @@ ckan -c "$config" harvester initdb
 ckan -c "$config" db pending-migrations --apply
 
 if [ -n "$MAIL_SERVER" ]; then
-  ckan config-tool "$CONFIG" "smtp.server = $MAIL_SERVER"
+  ckan config-tool "$config" "smtp.server = $MAIL_SERVER"
 fi
 if [ -n "$MAIL_PORT" ]; then
-  ckan config-tool "$CONFIG" "smtp.port = $MAIL_PORT"
+  ckan config-tool "$config" "smtp.port = $MAIL_PORT"
 fi
 if [ -n "$MAIL_USE_TLS" ]; then
-  ckan config-tool "$CONFIG" "smtp.starttls = $MAIL_USE_TLS"
+  ckan config-tool "$config" "smtp.starttls = $MAIL_USE_TLS"
 fi
 if [ -n "$MAIL_USERNAME" ]; then
-  ckan config-tool "$CONFIG" "smtp.user = $MAIL_USERNAME"
+  ckan config-tool "$config" "smtp.user = $MAIL_USERNAME"
 fi
 if [ -n "$MAIL_PASSWORD" ]; then
-  ckan config-tool "$CONFIG" "smtp.password = $MAIL_PASSWORD"
+  ckan config-tool "$config" "smtp.password = $MAIL_PASSWORD"
 fi
 if [ -n "$MAIL_FROM" ]; then
-  ckan config-tool "$CONFIG" "smtp.mail_from = $MAIL_FROM"
+  ckan config-tool "$config" "smtp.mail_from = $MAIL_FROM"
 fi
 if [ -n "$FEEDBACK_RECIPIENTS" ]; then
-  ckan config-tool "$CONFIG" "feedback.recipients = $FEEDBACK_RECIPIENTS"
+  ckan config-tool "$config" "feedback.recipients = $FEEDBACK_RECIPIENTS"
 fi
 
 exec "$@"
