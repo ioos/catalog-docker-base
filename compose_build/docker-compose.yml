@@ -101,7 +101,7 @@ services:
       - SOLR_CONFIG_DIR=/opt/solr/server/solr/configsets
       - SOLR_SCHEMA_FILE=/opt/solr/server/solr/configsets/ckan/conf/schema.xml
     volumes:
-      - solr_core_data:/opt/solr/server/solr/ckan
+      - solr_core_data:/var/solr
       # could also do Dockerfile COPY here
       - ../contrib/solr/schema.xml:/opt/solr/server/solr/configsets/ckan/conf/schema.xml
     ports:
