@@ -1,6 +1,5 @@
 # docker-compose build && docker-compose up -d
 # If "docker-compose logs ckan" shows DB not ready, run "docker-compose restart ckan" a few times.
-version: "3"
 
 volumes:
   pycsw_config:
