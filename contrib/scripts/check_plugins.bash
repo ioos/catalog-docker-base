@@ -26,7 +26,7 @@ fi
 # needed for consistent secret key?
 ckan generate config "$config"
 ckan config-tool "$config" \
-    "feedback.site_key=$(openssl rand -base64 16)" \
+    "feedback.site_key=${FEEDBACK_SITE_KEY:-}" \
     "googleanalytics.id=${GA_ID:-none}" \
     "googleanalytics.account=${GA_ACCOUNT:-none}" \
     "googleanalytics.username=${GA_USERNAME:-none}" \
