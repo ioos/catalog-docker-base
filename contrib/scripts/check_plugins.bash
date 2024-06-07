@@ -27,6 +27,7 @@ fi
 ckan generate config "$config"
 ckan config-tool "$config" \
     "feedback.site_key=${FEEDBACK_SITE_KEY:-}" \
+    "feedback.recipients=${FEEDBACK_RECIPIENTS:-}" \
     "googleanalytics.id=${GA_ID:-none}" \
     "googleanalytics.account=${GA_ACCOUNT:-none}" \
     "googleanalytics.username=${GA_USERNAME:-none}" \
