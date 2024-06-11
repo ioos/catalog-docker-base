@@ -18,7 +18,7 @@ RUN apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN pip install --no-cache-dir -U pip && \
     pip install --no-cache-dir \
-       wheel flask_debugtoolbar oauth2client && \
+       wheel 'flask_debugtoolbar==0.14.1' oauth2client && \
     pip install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase_2#egg=ckanext-spatial \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
        -e git+https://github.com/ioos/ckanext-ioos-theme.git@main#egg=ckanext-ioos-theme \
