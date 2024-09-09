@@ -1,4 +1,4 @@
-FROM keitaro/ckan:2.10.4-focal
+FROM keitaro/ckan:2.10.5-focal
 
 USER root
 # Add my custom configuration file

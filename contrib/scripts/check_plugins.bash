@@ -120,6 +120,7 @@ ckan config-tool "$config" \
                     "ckan.harvest.mq.type = redis" \
                     "ckan.harvest.mq.hostname = redis" \
                     "ckan.harvest.mq.port = ${REDIS_PORT:-6379}" \
+		    "ckan.search.solr_allowed_query_parsers=field" \
                     "ckan.spatial.validator.profiles = iso19139ngdc" \
                     "ckanext.spatial.common_map.type = custom" \
                     "ckanext.spatial.common_map.custom.url = https://server.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}" \
