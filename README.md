@@ -1,7 +1,7 @@
 # catalog-docker-base
 Docker Image for the base CKAN build for all CKAN related images
 
-## Build for CKAN 2.8
+## Build for CKAN 2.10
 
 To run, please have `docker` and `docker-compose` installed and run the
 following in this order:
@@ -34,10 +34,9 @@ to add a superuser to CKAN.
 
 ### Optional: Load harvester config
 
-Run `docker exec ckan bash /opt/fixture_data/set_harvests.bash <API_KEY>` in order to
-load up the default IOOS harvests.  The API key for a particular user can be
-found on the user account page of the CKAN website or from the output of the previously listed sysadmin command. 
-The API key must correspond to a user with sufficient privileges to create groups/organizations.
+Run `docker exec ckan ckan -c /etc/ckan/production.ini user token add <username> <token_name>`, using the user name from the previous step in "Create a superuser".
+Copy the generated token value in the terminal and then run `docker exec ckan bash /opt/fixture_data/set_harvests.bash <token_value>` using the previously copied token value in order to
+load up the default IOOS harvests.  The token value must correspond to a user with sufficient privileges to create groups/organizations, hence why a superuser token is supplied in this example.
 
 Lastly, run `crontab -e` and add the following line to ensure the harvester
 is periodically run:
