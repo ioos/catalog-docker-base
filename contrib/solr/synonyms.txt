@@ -1,0 +1,2 @@
+# Make "Gulf of America" and "Gulf of America" both return equivalent results
+Gulf of America => Gulf of Mexico
