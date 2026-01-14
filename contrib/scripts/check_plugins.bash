@@ -62,11 +62,9 @@ harvest
 ckan_harvester
 csw_harvester
 waf_harvester
-dcat
 googleanalytics
+dcat
 dcat_rdf_harvester
-dcat_json_harvester
-dcat_json_interface
 structured_data
 EOF
 ) | tr "\n" ' ' | sed 's/ $//')

@@ -18,14 +18,13 @@ RUN apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN pip install --no-cache-dir -U pip && \
     pip install --no-cache-dir \
-       wheel oauth2client flask_debugtoolbar 'Flask<2.4' 'Werkzeug==2.1.2' && \
-       #wheel 'flask_debugtoolbar==0.14.1' oauth2client && \
+       wheel oauth2client flask_debugtoolbar 'Flask<2.4' 'Werkzeug==2.1.2' \
+       ckanext-dcat && \
     pip install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase_2#egg=ckanext-spatial \
        -e "git+https://github.com/ckan/ckanext-scheming.git#egg=ckanext-scheming" \
        -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
        -e git+https://github.com/ioos/ckanext-ioos-theme.git@main#egg=ckanext-ioos-theme \
-       -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics \
-       -e git+https://github.com/ckan/ckanext-dcat.git@master#egg=ckanext-dcat
+       -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics
 
 # for ckan harvester run-test command
 RUN pip install --no-cache-dir factory_boy mock pytest
@@ -36,7 +35,7 @@ RUN pip install --no-cache-dir \
        -r "/srv/app/src/ckanext-ioos-theme/requirements.txt" \
        -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" \
        -r "/srv/app/src/ckanext-googleanalytics/requirements.txt" \
-       -r "/srv/app/src/ckanext-dcat/requirements.txt" pycsw cf-units && \
+       pycsw cf-units && \
     pip install --no-cache-dir -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" && \
     # fixme: update pycsw version
     #ckan-pip3 install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
