@@ -18,7 +18,7 @@ RUN apt-get update -y && \
 # in order for most CKAN plugins to work!
 RUN pip install --no-cache-dir -U pip && \
     pip install --no-cache-dir \
-       wheel oauth2client flask_debugtoolbar 'Flask<2.4' 'Werkzeug==2.1.2' \
+       wheel oauth2client 'Flask<2.4' 'Werkzeug==2.1.2' \
        ckanext-dcat && \
     pip install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase_2#egg=ckanext-spatial \
        -e "git+https://github.com/ckan/ckanext-scheming.git#egg=ckanext-scheming" \
