@@ -126,7 +126,10 @@ ckan config-tool "$config" \
                     "ckanext.spatial.search_backend = solr-spatial-field" \
                     "ckan.spatial.harvest.continue_on_validation_errors = true" \
                     "ckan.ioos_theme.pycsw_config=/etc/pycsw/pycsw.cfg" \
-                    "ckan.cors.origin_allow_all = true"
+                    "ckan.cors.origin_allow_all = true" \
+                    "ckan.locales_offered = en en_AU en_GB de fr es sv nl"
+
+
 
 ckan -c "$config" db init
 ckan -c "$config" db pending-migrations --apply
