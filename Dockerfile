@@ -1,46 +1,45 @@
-FROM keitaro/ckan:2.10.5-focal
+FROM ckan/ckan-base:2.11.5
 
 USER root
 # Add my custom configuration file
 COPY "./contrib/config/pycsw/pycsw.cfg" "$CKAN_CONFIG/"
 COPY "./contrib/scripts/" "/usr/local/bin/"
 RUN apt-get update -y && \
-    #apt-get install -y debian-archive-keyring && \
-    apt-get install -q --force-yes -y git libgeos-dev \
-                         libxml2-dev \
-                         libxslt1-dev \
-                         zlib1g-dev \
-                         libudunits2-dev && \
-    apt-get -q clean && \
-    rm -rf /var/lib/apt/lists/*
+  #apt-get install -y debian-archive-keyring && \
+  apt-get install -q --force-yes -y git libgeos-dev \
+  libxml2-dev \
+  libxslt1-dev \
+  zlib1g-dev \
+  libudunits2-dev && \
+  apt-get -q clean && \
+  rm -rf /var/lib/apt/lists/*
 
 # pip install must be run with -e and then requirements manually installed
 # in order for most CKAN plugins to work!
 RUN pip install --no-cache-dir -U pip && \
-    pip install --no-cache-dir \
-       wheel oauth2client 'Flask<2.4' 'Werkzeug==2.1.2' \
-       ckanext-dcat && \
-    pip install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase_2#egg=ckanext-spatial \
-       -e "git+https://github.com/ckan/ckanext-scheming.git#egg=ckanext-scheming" \
-       -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
-       -e git+https://github.com/ioos/ckanext-ioos-theme.git@main#egg=ckanext-ioos-theme \
-       -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics
+  pip install --no-cache-dir \
+  wheel oauth2client ckanext-dcat && \
+  pip install -e git+https://github.com/ioos/ckanext-spatial.git@ioos_ckan_master_rebase_4#egg=ckanext-spatial \
+  -e "git+https://github.com/ckan/ckanext-scheming.git#egg=ckanext-scheming" \
+  -e git+https://github.com/ckan/ckanext-harvest.git#egg=ckanext-harvest \
+  -e git+https://github.com/ioos/ckanext-ioos-theme.git#egg=ckanext-ioos-theme \
+  -e git+https://github.com/ckan/ckanext-googleanalytics.git#egg=ckanext-googleanalytics
 
 # for ckan harvester run-test command
 RUN pip install --no-cache-dir factory_boy mock pytest
 
 RUN pip install --no-cache-dir \
-       -r "/srv/app/src/ckanext-spatial/requirements.txt" && \
-    pip install --no-cache-dir \
-       -r "/srv/app/src/ckanext-ioos-theme/requirements.txt" \
-       -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" \
-       -r "/srv/app/src/ckanext-googleanalytics/requirements.txt" \
-       pycsw cf-units && \
-    pip install --no-cache-dir -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" && \
-    # fixme: update pycsw version
-    #ckan-pip3 install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
-    #                                OWSLib==0.16.0 lxml==3.6.2 && \
-    pip install --no-cache-dir ckanapi rdflib future 'six>=1.12.0'
+  -r "/srv/app/src/ckanext-spatial/requirements.txt" && \
+  pip install --no-cache-dir \
+  -r "/srv/app/src/ckanext-ioos-theme/requirements.txt" \
+  -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" \
+  -r "/srv/app/src/ckanext-googleanalytics/requirements.txt" \
+  pycsw cf-units && \
+  pip install --no-cache-dir -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" && \
+  # fixme: update pycsw version
+  #ckan-pip3 install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
+  #                                OWSLib==0.16.0 lxml==3.6.2 && \
+  pip install --no-cache-dir ckanapi rdflib future 'six>=1.12.0'
 
 # the above appears to be necessary to run separately, or otherwise it results
 # in a double requirements error with the above requirements files
