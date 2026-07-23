@@ -9,6 +9,7 @@ RUN apt-get update -y && \
   apt-get install -q --force-yes -y git libgeos-dev \
   libxml2-dev \
   libxslt1-dev \
+  postgresql-client \
   zlib1g-dev \
   libudunits2-dev && \
   apt-get -q clean && \
