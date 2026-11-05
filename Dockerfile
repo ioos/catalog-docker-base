@@ -1,4 +1,4 @@
-FROM ckan/ckan-base:2.11.5
+FROM ckan/ckan-base:2.12
 
 USER root
 # Add my custom configuration file
@@ -10,6 +10,7 @@ RUN apt-get update -y && \
   libxml2-dev \
   libxslt1-dev \
   postgresql-client \
+  proj-bin \
   zlib1g-dev \
   libudunits2-dev && \
   apt-get -q clean && \
@@ -35,7 +36,7 @@ RUN pip install --no-cache-dir \
   -r "/srv/app/src/ckanext-ioos-theme/requirements.txt" \
   -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" \
   -r "/srv/app/src/ckanext-googleanalytics/requirements.txt" \
-  pycsw cf-units && \
+  cf-units && \
   pip install --no-cache-dir -r "/srv/app/src/ckanext-harvest/pip-requirements.txt" && \
   # fixme: update pycsw version
   #ckan-pip3 install --no-cache-dir pycsw==1.8.6 Shapely==1.5.17 \
